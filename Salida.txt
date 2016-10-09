@@ -1,1 +1,4 @@
-pepep lagarto mema ndsa
+CLASS persona BEGIN
+INTEGER edad;
+edad = 14;
+ENDCLASS

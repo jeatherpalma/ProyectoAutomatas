@@ -25,9 +25,10 @@ public class Analiza extends JFrame {
     	int Terminal=0;
     	Toolkit t = Toolkit.getDefaultToolkit();
     	Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int puntero_codigo =0;
 
     //Variables para el método sintáctico
-    boolean bandera,banderaSinerror;
+    boolean bandera;
     Pila pila;
 	public Analiza()
 	{
@@ -100,6 +101,7 @@ public class Analiza extends JFrame {
             	@Override
             	public void mouseClicked(MouseEvent e) {
                		Abrir();
+                        puntero_codigo = 0;
             	}});
 
         	//Etiqueta para borrar
@@ -121,6 +123,7 @@ public class Analiza extends JFrame {
                 	jTextAreaSintactico.setText("");
                 	jTextAreaImprime.setText("");
                 	jTextAreaGuarda.setText("");
+                        puntero_codigo = 0;
             	}});
 
 		//Etiqueta que sirve para añadir el icono de guardar
@@ -138,6 +141,7 @@ public class Analiza extends JFrame {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		      	save();
+                        puntero_codigo = 0;
 		}});
 
 
@@ -156,6 +160,7 @@ public class Analiza extends JFrame {
 		jLabelEjecuta.addMouseListener(new MouseAdapter() {
 		@Override
 		public void mouseClicked(MouseEvent e) {
+                        puntero_codigo = 0;
 			String texto = jTextAreaGuarda.getText();
 		        if (texto.matches("[[ ]*[\n]*[\t]]*")) 
 			{
@@ -180,7 +185,7 @@ public class Analiza extends JFrame {
 		            }
 		            
 				
-		            	Analiza();
+		            	Sintactico();
 
 		        }
 		    }
@@ -210,18 +215,11 @@ public class Analiza extends JFrame {
 	}
     
 
-//Método Analizador
-    public void  Analiza()
+    //Metodo que obtiene el código que será analizado
+    public String  get_codigo()
      {
-         pila = new Pila(32);
-         bandera=true;
-         banderaSinerror=true;
-         pila.PUSH(143);
-         jTextAreaSintactico.append("Valor introducido a la pila: " + 143+"\n");
-         pila.PUSH(0);
-         jTextAreaSintactico.append("Valor introducido a la pila: " + 0+"\n");
-         int estados=0,columna=0;
-         String palbra="";
+         
+         String codigo_a_ejecutar="";
 
     	
         String nombreFichero ="Salida.txt";
@@ -234,51 +232,71 @@ public class Analiza extends JFrame {
 
             //While que lee el archivo y lo guarda en toda la palabra                                    
             while (contador_while_palabra<=file.length()-1) {
-                estados = 0;
+              
                 int caracter = fileReader.read();
-                palbra += (char) caracter;
+                codigo_a_ejecutar += (char) caracter;
                 contador_while_palabra++;
 
             }//Fin del while
             
-
-            int aux=0;
-            String analiza;
-            int contador_while_analiza=0;
             
-            while(true){
+        }
+        catch (FileNotFoundException e)
+	{
+            //Fichero no encontrado
+        }
+        catch (IOException e)
+        {
 
-                aux=contador_while_analiza-1;
-                estados=0;
-                analiza="";
-                while (estados<=18) {
-                    int caracter = palbra.charAt(contador_while_analiza);
-                    analiza += (char) caracter;
-                    columna = Relaciona((char) caracter);
-                    estados = Matriz(estados, columna);
-                                contador_while_analiza++;
-                                aux++;
+        }
+        finally {
+	       try {
+                    if(fileReader !=null){
+			   fileReader.close();
+		    }
+	        }catch (Exception e)
+		{
 
+		}
+            return codigo_a_ejecutar;
+}
+     }//Fin del método analizador
+    
+    public int Lexico(String palbra)
+    {
+        int Terminal=-1;
+        int aux=puntero_codigo-1;
+        int estados = 0;
+        String analiza="";
+        int columna;
+        
 
-                                if(contador_while_analiza==palbra.length() && estados<=18 )
-                                {
+        while (estados<=18) {
+    
+            int caracter = palbra.charAt(puntero_codigo);
+            analiza += (char) caracter;
+            columna = Relaciona((char) caracter);
+            estados = Matriz(estados, columna);
+            puntero_codigo++;
+            aux++;
+            if(puntero_codigo==palbra.length() && estados<=18 )
+            {
 
-                                    estados =Matriz(estados,27);
+            estados =Matriz(estados,27);
 
-
-                                }
-                            }
+            }
+        }//Fin del while del analisis lexico
 
                             if(estados==100)
                             {
 
-                                if(contador_while_analiza==palbra.length()&& (int)analiza.charAt(analiza.length()-1)>=(int)'A'&&(int)analiza.charAt(analiza.length()-1)<=(int)'Z')
+                                if(puntero_codigo==palbra.length()&& (int)analiza.charAt(analiza.length()-1)>=(int)'A'&&(int)analiza.charAt(analiza.length()-1)<=(int)'Z')
                                 {
 
 
                                     analiza+=" ";
                                 }else{
-                                      contador_while_analiza=aux;
+                                      puntero_codigo=aux;
                                 }
                                 System.out.println(">-----Palabra reservada");
                                 String palabra = analiza.substring(0,analiza.length()-1);
@@ -289,7 +307,7 @@ public class Analiza extends JFrame {
                                 }
                                 if(palabra.trim().equals("BEGIN"))
                                 {
-                                    System.out.println("paso");
+                                    
                                     Terminal=101;
                                 }
                                 if(palabra.trim().equals("ENDCLASS"))
@@ -371,58 +389,45 @@ public class Analiza extends JFrame {
                                     jTextAreaImprime.append(analiza.substring(0,analiza.length()-1)+">----Palabra recervada\n");
                                 }
 
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-
-                                Terminal=0;
+                              
+                              
 
                             }
                             if(estados==101)
                             {
 
 
-                                if(contador_while_analiza==palbra.length()&& (int)analiza.charAt(analiza.length()-1)>=(int)'a'&&(int)analiza.charAt(analiza.length()-1)<=(int)'z'
+                                if(puntero_codigo==palbra.length()&& (int)analiza.charAt(analiza.length()-1)>=(int)'a'&&(int)analiza.charAt(analiza.length()-1)<=(int)'z'
                                         || (int)analiza.charAt(analiza.length()-1)>=(int)'A'&&(int)analiza.charAt(analiza.length()-1)<=(int)'Z'
                                         || (int)analiza.charAt(analiza.length()-1)>=(int)'0'&&(int)analiza.charAt(analiza.length()-1)<=(int)'9')
                                 {
                                         analiza+=" ";
                                 }else{
-                                    contador_while_analiza=aux;
+                                    puntero_codigo=aux;
 
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Identificador");
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1)+">----Identificador\n");
                                 Terminal=130;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
+                                
                             }
                             if(estados==102)
                             {
-                                if(contador_while_analiza==palbra.length() && (int)analiza.charAt(analiza.length()-1)>=(int)'0'&&(int)analiza.charAt(analiza.length()-1)<=(int)'9')
+                                if(puntero_codigo==palbra.length() && (int)analiza.charAt(analiza.length()-1)>=(int)'0'&&(int)analiza.charAt(analiza.length()-1)<=(int)'9')
                                 {
                                     analiza+=" ";
 
                                 }else{
-                                    contador_while_analiza=aux;
+                                    puntero_codigo=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Entero");
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1)+">----Entero\n");
                                 Terminal = 136;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
+                                
                             }
                             System.out.println(estados);
 
@@ -430,42 +435,32 @@ public class Analiza extends JFrame {
                             {
 
 
-                                if(contador_while_analiza==palbra.length() && (int)analiza.charAt(analiza.length()-1)>=(int)'0'&&(int)analiza.charAt(analiza.length()-1)<=(int)'9')
+                                if(puntero_codigo==palbra.length() && (int)analiza.charAt(analiza.length()-1)>=(int)'0'&&(int)analiza.charAt(analiza.length()-1)<=(int)'9')
                                 {
 
 
                                 }else{
-                                    contador_while_analiza=aux;
+                                    puntero_codigo=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Número real");
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1)+">----Número real\n");
                                 Terminal = 137;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==104)
                             {
-                                if(contador_while_analiza==palbra.length()-1)
+                                if(puntero_codigo==palbra.length()-1)
                                 {
 
                                 }else{
-                                    contador_while_analiza=aux;
+                                    puntero_codigo=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Numero con notacion cientifica");
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1)+">----Número con notación cientifica\n");
                                 Terminal = 138;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==105)
                             {
@@ -474,12 +469,7 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Operador aritmetico suma");
                                 jTextAreaImprime.append(analiza+">----Operador aritmetico suma\n");
                                 Terminal = 132;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==106)
                             {
@@ -487,12 +477,7 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Operador aritmetico resta");
                                 jTextAreaImprime.append(analiza+">----Operador aritmetico resta\n");
                                 Terminal = 133;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==107)
                             {
@@ -500,12 +485,7 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Operador aritmetico multiplicacion");
                                 jTextAreaImprime.append(analiza+">----Operador aritmetico multiplicación\n");
                                 Terminal = 134;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==108)
                             {
@@ -513,12 +493,7 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Operador aritmetico division");
                                 jTextAreaImprime.append(analiza+">----Operador aritmetico división\n");
                                 Terminal = 135;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==109)
                             {
@@ -532,12 +507,7 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Operador lógico AND");
                                 jTextAreaImprime.append(analiza+">----Operador lógico AND\n");
                                 Terminal = 118;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==111)
                             {
@@ -545,12 +515,7 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Operador lógico OR");
                                 jTextAreaImprime.append(analiza+">----Operador lógico OR\n");
                                 Terminal = 117;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==112)
                             {
@@ -558,12 +523,7 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Operador relacional diferente !");
                                 jTextAreaImprime.append(analiza+">----Operador relacional !\n");
                                 Terminal = 119;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==113)
                             {
@@ -571,16 +531,11 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Operador relacional diferente de");
                                 jTextAreaImprime.append(analiza+">----Operador relacional diferente de !=\n");
                                 Terminal = 120;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==114)
                             {
-                                if(contador_while_analiza==palbra.length()-1)
+                                if(puntero_codigo==palbra.length()-1)
                                 {
                                     analiza+=" ";
 
@@ -589,53 +544,38 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Operador relacional de asignación");
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length())+">----Operador relacional de igual a\n");
                                 Terminal = 131;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==115)
                             {
-                                if(contador_while_analiza==palbra.length()-1)
+                                if(puntero_codigo==palbra.length()-1)
                                 {
                                     analiza+=" ";
 
                                 }else{
-                                    contador_while_analiza=aux;
+                                    puntero_codigo=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Operador relacional de igual a");
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1)+">----Operador relacional de asignación\n");
                                 Terminal = 126;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
 
                             }
                             if(estados==116)
                             {
-                                if(contador_while_analiza==palbra.length()-1)
+                                if(puntero_codigo==palbra.length()-1)
                                 {
                                     analiza+=" ";
 
                                 }else{
-                                    contador_while_analiza=aux;
+                                    puntero_codigo=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Operador relacional menor que");
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1)+">----Operador relacional menor que\n");
                                 Terminal=121;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==117)
                             {
@@ -643,32 +583,22 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Operador relacional menor igual  que");
                                 jTextAreaImprime.append(analiza+">----Operador relacional menor igual que \n");
                                 Terminal=122;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==119)
                             {
-                                if(contador_while_analiza==palbra.length()-1)
+                                if(puntero_codigo==palbra.length()-1)
                                 {
 
                                     analiza+=" ";
                                 }else{
-                                    contador_while_analiza=aux;
+                                    puntero_codigo=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Operador relacional mayor que");
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1)+">----Operador relacional mayor que\n");
                                 Terminal=123;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==118)
                             {
@@ -677,12 +607,7 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Operador relacional mayor igual que");
                                 jTextAreaImprime.append(analiza+">----Operador relacional mayor igual que\n");
                                 Terminal=124;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==120)
                             {
@@ -690,12 +615,7 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Constante caracter");
                                 jTextAreaImprime.append(analiza+">----Constante caracter\n");
                                 Terminal=139;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
 
                             if(estados==121)
@@ -704,12 +624,7 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Constante String");
                                 jTextAreaImprime.append(analiza+">----Constante String\n");
                                 Terminal=140;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==122)
                             {
@@ -717,12 +632,7 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Signo de agrupacion parentesis abre (");
                                 jTextAreaImprime.append(analiza+">----Signo de agrupación parentesis abre (\n");
                                 Terminal=128;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==123)
                             {
@@ -730,12 +640,7 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Signo de agrupacion parentesis cierra )");
                                 jTextAreaImprime.append(analiza+">----Signo de agrupación parentesis cierra )\n");
                                 Terminal=129;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==124)
                             {
@@ -755,13 +660,7 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Signo de puntuacion punto y coma ;");
                                 jTextAreaImprime.append(analiza+">----Signo de puntuación punto y coma\n");
                                 Terminal=127;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                 
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==127)
                             {
@@ -769,12 +668,7 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Signo de puntuacion coma ,");
                                 jTextAreaImprime.append(analiza+">----Signo de puntuación coma\n");
                                 Terminal=125;
-                                if(banderaSinerror!=false)
-                                {
-                                    bandera=true;
-                                    Sintactico(Terminal);
-                                }
-                                Terminal=0;
+                                
                             }
                             if(estados==128)
                             {
@@ -791,11 +685,11 @@ public class Analiza extends JFrame {
 
                             if(estados==501)
                             {
-                                if(contador_while_analiza==palbra.length()-1)
+                                if(puntero_codigo==palbra.length()-1)
                                 {
 
                                 }else{
-                                    contador_while_analiza=aux;
+                                    puntero_codigo=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Error real esperaba un numero y se recibio algo diferente");
@@ -803,11 +697,11 @@ public class Analiza extends JFrame {
                             }
                             if(estados==502)
                             {
-                                if(contador_while_analiza==palbra.length()-1)
+                                if(puntero_codigo==palbra.length()-1)
                                 {
 
                                 }else{
-                                    contador_while_analiza=aux;
+                                    puntero_codigo=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Error de notacion esperaba un + o - o digito  y se recibio algo diferente");
@@ -815,12 +709,12 @@ public class Analiza extends JFrame {
                             }
                             if(estados==503)
                             {
-                                if(contador_while_analiza==palbra.length()-1)
+                                if(puntero_codigo==palbra.length()-1)
                                 {
 
                                     analiza+=" ";
                                 }else{
-                                    contador_while_analiza=aux;
+                                    puntero_codigo=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Error notacion esperaba un numero y se recibio algo diferente");
@@ -831,11 +725,11 @@ public class Analiza extends JFrame {
                             if(estados==504)
                             {
                                 System.out.println(analiza.substring(analiza.length()-1));
-                                if(contador_while_analiza==palbra.length())
+                                if(puntero_codigo==palbra.length())
                                 {
                                      analiza+=" ";
                                 }else{
-                                    contador_while_analiza=aux;
+                                    puntero_codigo=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Error de operacion logico esperaba un & y se recibio algo diferente");
@@ -844,12 +738,12 @@ public class Analiza extends JFrame {
                             }
                             if(estados==505)
                             {
-                                if(contador_while_analiza==palbra.length())
+                                if(puntero_codigo==palbra.length())
                                 {
 
                                     analiza+=" ";
                                 }else{
-                                    contador_while_analiza=aux;
+                                    puntero_codigo=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Error de operacion logico esperaba un | y se recibio algo diferente");
@@ -858,12 +752,12 @@ public class Analiza extends JFrame {
                             }
                             if(estados==506)
                             {
-                                if(contador_while_analiza==palbra.length())
+                                if(puntero_codigo==palbra.length())
                                 {
                                     analiza+=" ";
 
                                 }else{
-                                    contador_while_analiza=aux;
+                                    puntero_codigo=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Error se espera algo diferente de comilla");
@@ -872,11 +766,11 @@ public class Analiza extends JFrame {
                             }
                             if(estados==507)
                             {
-                                if(contador_while_analiza==palbra.length())
+                                if(puntero_codigo==palbra.length())
                                 {
                                    analiza+=" ";
                                 }else{
-                                    contador_while_analiza=aux;
+                                    puntero_codigo=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Error se esperaba finalizar con comilla");
@@ -888,48 +782,10 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Error se esperaba finalizar con comilla");
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1)+">----Error no se cerro el String\n");
                             }
-
-						}
-                    if(banderaSinerror==false || pila.VALOR()!=143)
-                    {
-                        JOptionPane.showMessageDialog(null,"ERROR","ERROR SINTÁCTICO 999",JOptionPane.ERROR_MESSAGE);
-                    }
-                    else
-                    {
-                        JOptionPane.showMessageDialog(null,"Código analizado sintaxis correcta");
-
-                    }
-
-
-
-						palbra="";
-
-					//}
-
-
-
-				}catch (FileNotFoundException e)
-				{
-					//Fichero no encontrado
-				}
-                catch (IOException e)
-                {
-
-                }
-				finally {
-					try {
-
-						if(fileReader !=null){
-							fileReader.close();
-						}
-					}catch (Exception e)
-					{
-
-					}
-				}
-
-			}//Fin del método analizador
-
+        
+        return Terminal;
+    }
+     
     //Metodo relaciona
     public int Relaciona(char c)
     {
@@ -3332,8 +3188,14 @@ public class Analiza extends JFrame {
     }//Fin del metodo de la matriz
 
     //Método de sintaxis
-    public void Sintactico(int tokenEntrada){
+    public void Sintactico(){
 
+         String codigo_enviar = get_codigo();
+         pila = new Pila(32);
+         pila.PUSH(143);
+         jTextAreaSintactico.append("Valor introducido a la pila: " + 143+"\n");
+         pila.PUSH(0);
+         jTextAreaSintactico.append("Valor introducido a la pila: " + 0+"\n");
         //Tabla de producciones
         int tablaProducciones[][]={{1,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
                 {999,   999,    999,    2,  2,  2,  2,  2,  4,  5,  6,  999,    999,    7,  999,    8,  999,    999,    999,    999,    999,    999,    999,    999,    999,999,999,999,999,999,3,999,999,999,999,999,999,999,999,999,999,999,999,999},
@@ -3449,92 +3311,114 @@ public class Analiza extends JFrame {
                {141},
                {142},
                {128,14,139}	};
-
-        while(bandera)
+       int auxilira_token=0;
+       int tokenEntrada;
+        while(true)
         {
            //Metodo para el análisis de sintaxis
-            try {
-
-                //Compara si el valor de la cima de la pila es igual al 143 y si se llego al final de los tokens analizados para salir del ciclo
-                if(pila.VALOR()==143 && tokenEntrada==143)
+           //Pedimos un token de entrada al léxico
+            if(auxilira_token!=0)
+            {
+              tokenEntrada = auxilira_token;
+            }
+            else
+            {
+                tokenEntrada= Lexico(codigo_enviar);
+                auxilira_token =0;
+            }
+             
+            
+            System.out.println("token de entrada: " +tokenEntrada);
+             //Compara si el valor de la cima de la pila es igual al 143 y si se llego al final de los tokens analizados para salir del ciclo
+                if(pila.VALOR()==143)
                 {
-                    bandera=false;
+                    
                     break;
                 }
-                //Compara si el valor de la cima de la pila es un elemento terminal y lo compara con el elemento terminal del vector de entrada
+            try {
+                //Resultado es el valor de la tabla que se saca con el elemnto de entrada del vector y la posición de las producciones
+                int resultado = tablaProducciones[pila.VALOR()][tokenEntrada - 100];
+                //Se elimina el primer elemnto de la pila y se sacan los nuevos de la tabla lr
+                jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
+                for (int j = tablaLr[resultado - 1].length - 1; j >= 0; j--) 
+                {
+                       if (tablaLr[resultado - 1][j] == -1) 
+                       {
+
+
+                       } else
+                             {
+                               jTextAreaSintactico.append("Valor introducido a la pila: " + tablaLr[resultado - 1][j]+"\n");
+                               pila.PUSH(tablaLr[resultado - 1][j]);
+
+                             }
+
+
+                }
+               while(pila.VALOR()>=100)
+               {
+                   //Compara si el valor de la cima de la pila es un elemento terminal y lo compara con el elemento terminal del vector de entrada
                 if (pila.VALOR() == tokenEntrada) {
                     jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
-                    bandera=false;
+                    
                 } else {
                     //Si el valor de la pila no es igual al terminal del vector de entrada pero es mayo de 100 quiere decir que hay error de sintaxis
                     if (pila.VALOR() >= 100) {
                         jTextAreaSintactico.append("ERROR 999 DE SINTAXIS CORRIJA SU CÓDIGO");
-                        bandera=false;
-                        banderaSinerror=false;
+                        JOptionPane.showMessageDialog(null, "Error","Error sintactico",JOptionPane.ERROR_MESSAGE);
                         break;
 
                     } else {
-                        //Resultado es el valor de la tabla que se saca con el elemnto de entrada del vector y la posición de las producciones
-                        int resultado = tablaProducciones[pila.VALOR()][tokenEntrada - 100];
+                        
 
                         //Si el resultado es igual a 999 quiere decir que es error
                         if (resultado == 999) {
                             jTextAreaSintactico.append("ERROR 999 DE SINTAXIS CORRIJA SU CÓDIGO");
-                            bandera = false;
-                            banderaSinerror=false;
+                            JOptionPane.showMessageDialog(null, "Error","Error sintactico",JOptionPane.ERROR_MESSAGE);
                             break;
                         }
                         //Else por si no hubo error alguno
                         else {
-
-                            //Checamos el resultado si es mayor o igual a 100 eso indica que encontro un elemnto terminal y es el que se encuentra en la pila
-                            if (pila.VALOR() == tokenEntrada) {
-                                jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
-                                bandera=false;
-                            }
-                            else
                             if(pila.VALOR()>=100 && pila.VALOR()!=tokenEntrada)
                             {
-                                bandera=false;
                                 jTextAreaSintactico.append("ERROR 999 DE SINTAXIS CORRIJA SU CÓDIGO");
-                                banderaSinerror=false;
+                                JOptionPane.showMessageDialog(null, "Error","Error sintactico",JOptionPane.ERROR_MESSAGE);
                                 break;
                             }else{
 
-                                //Se elimina el primer elemnto de la pila y se sacan los nuevos de la tabla lr
-                                jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
-                                for (int j = tablaLr[resultado - 1].length - 1; j >= 0; j--) {
-                                    if (tablaLr[resultado - 1][j] == -1) {
-
-
-                                    } else
-                                    {
-                                        jTextAreaSintactico.append("Valor introducido a la pila: " + tablaLr[resultado - 1][j]+"\n");
-                                        pila.PUSH(tablaLr[resultado - 1][j]);
-
-                                    }
-
-
-                                }
+                                
                             }
+                            //Compara si el valor de la cima de la pila es un elemento terminal y lo compara con el elemento terminal del vector de entrada
+                            if (pila.VALOR() == tokenEntrada) {
+                               jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
+                               
+                                }
 
                         }//Fin else por si no se ha Ayado un error
 
 
 
                     }
+                   
+               }
+                tokenEntrada = Lexico(codigo_enviar);
 
                 }
             }catch (ArrayIndexOutOfBoundsException e)
             {
-                bandera=false;
+                
                 e.printStackTrace();
-                jTextAreaSintactico.append("ERROR 999 DE SINTAXIS CORRIJA SU CÓDIGO");
-                banderaSinerror=false;
+                jTextAreaSintactico.append("EXCEPCION: " +e+"\n");
+               
             }
         }
 
     }//Fin del método de sintaxis
+    
+    public int get_token(int token)
+    {
+        return token;
+    }
 
     //Método para guardar archivo
     private void save(){

@@ -12,23 +12,13 @@ public class Analisis_Lexico {
     //Objeto de la pila
     Pila obje1_pila;
     
-    
-    
-    public int get_token_terminal()
-    {
-        int terminal = 0;
-        obje1_pila = new Pila(32);
-        
-        
-        
-        
-        return terminal;
-        
-    }
-            
-    
+    int puntero_codigo=0;
+  
 
 
+	}
+				
 
-    
-}
+
+        
+ 
