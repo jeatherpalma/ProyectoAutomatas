@@ -11,7 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
 import java.util.Scanner;
-import java.util.Vector;
+
 
 public class Analiza extends JFrame {
 	Scanner sc = new Scanner(System.in);
@@ -23,7 +23,6 @@ public class Analiza extends JFrame {
         JScrollPane jScrollPaneGuarda,jScrollPaneSintactico;
         Color color = new Color(220000);
     	int Terminal=0;
-    	Vector<String> vectordeEntrada;
     	Toolkit t = Toolkit.getDefaultToolkit();
     	Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -180,7 +179,7 @@ public class Analiza extends JFrame {
 		                System.out.println("Error al escribir");
 		            }
 		            
-				vectordeEntrada = new Vector<String>();
+				
 		            	Analiza();
 
 		        }
@@ -221,48 +220,47 @@ public class Analiza extends JFrame {
          jTextAreaSintactico.append("Valor introducido a la pila: " + 143+"\n");
          pila.PUSH(0);
          jTextAreaSintactico.append("Valor introducido a la pila: " + 0+"\n");
-    	int estados=0,columna=0;
-		 String palbra="";
+         int estados=0,columna=0;
+         String palbra="";
 
-    	//while () {
-		 String nombreFichero ="Salida.txt";
-				//String nombreFichero="/home/jeather/archivo.txt";
-		        File file = new File(nombreFichero);
-				FileReader fileReader=null;
+    	
+        String nombreFichero ="Salida.txt";
+	File file = new File(nombreFichero);
+	FileReader fileReader=null;
 
-				try {
-					fileReader = new FileReader(file);
+	try {
+            fileReader = new FileReader(file);
+            int contador_while_palabra=0;
 
-					int contador=0;
+            //While que lee el archivo y lo guarda en toda la palabra                                    
+            while (contador_while_palabra<=file.length()-1) {
+                estados = 0;
+                int caracter = fileReader.read();
+                palbra += (char) caracter;
+                contador_while_palabra++;
 
-					while (contador<=file.length()-1) {
+            }//Fin del while
+            
 
-                        estados = 0;
-                        int caracter = fileReader.read();
-                        palbra += (char) caracter;
-                        contador++;
+            int aux=0;
+            String analiza;
+            int contador_while_analiza=0;
+            
+            while(true){
 
-                    }
-
-						int aux=0;
-                        String analiza="";
-                        int i=0;
-                    while(i<palbra.length() )
-						{
-
-						    aux=i-1;
-                            estados=0;
-                            analiza="";
-                            while (estados<=18) {
-                                int caracter = palbra.charAt(i);
-                                analiza += (char) caracter;
-                                columna = Relaciona((char) caracter);
-                                estados = Matriz(estados, columna);
-                                i++;
+                aux=contador_while_analiza-1;
+                estados=0;
+                analiza="";
+                while (estados<=18) {
+                    int caracter = palbra.charAt(contador_while_analiza);
+                    analiza += (char) caracter;
+                    columna = Relaciona((char) caracter);
+                    estados = Matriz(estados, columna);
+                                contador_while_analiza++;
                                 aux++;
 
 
-                                if(i==palbra.length() && estados<=18 )
+                                if(contador_while_analiza==palbra.length() && estados<=18 )
                                 {
 
                                     estados =Matriz(estados,27);
@@ -274,13 +272,13 @@ public class Analiza extends JFrame {
                             if(estados==100)
                             {
 
-                                if(i==palbra.length()&& (int)analiza.charAt(analiza.length()-1)>=(int)'A'&&(int)analiza.charAt(analiza.length()-1)<=(int)'Z')
+                                if(contador_while_analiza==palbra.length()&& (int)analiza.charAt(analiza.length()-1)>=(int)'A'&&(int)analiza.charAt(analiza.length()-1)<=(int)'Z')
                                 {
 
 
                                     analiza+=" ";
                                 }else{
-                                      i=aux;
+                                      contador_while_analiza=aux;
                                 }
                                 System.out.println(">-----Palabra reservada");
                                 String palabra = analiza.substring(0,analiza.length()-1);
@@ -386,13 +384,13 @@ public class Analiza extends JFrame {
                             {
 
 
-                                if(i==palbra.length()&& (int)analiza.charAt(analiza.length()-1)>=(int)'a'&&(int)analiza.charAt(analiza.length()-1)<=(int)'z'
+                                if(contador_while_analiza==palbra.length()&& (int)analiza.charAt(analiza.length()-1)>=(int)'a'&&(int)analiza.charAt(analiza.length()-1)<=(int)'z'
                                         || (int)analiza.charAt(analiza.length()-1)>=(int)'A'&&(int)analiza.charAt(analiza.length()-1)<=(int)'Z'
                                         || (int)analiza.charAt(analiza.length()-1)>=(int)'0'&&(int)analiza.charAt(analiza.length()-1)<=(int)'9')
                                 {
                                         analiza+=" ";
                                 }else{
-                                    i=aux;
+                                    contador_while_analiza=aux;
 
                                 }
                                 System.out.print(palbra);
@@ -408,12 +406,12 @@ public class Analiza extends JFrame {
                             }
                             if(estados==102)
                             {
-                                if(i==palbra.length() && (int)analiza.charAt(analiza.length()-1)>=(int)'0'&&(int)analiza.charAt(analiza.length()-1)<=(int)'9')
+                                if(contador_while_analiza==palbra.length() && (int)analiza.charAt(analiza.length()-1)>=(int)'0'&&(int)analiza.charAt(analiza.length()-1)<=(int)'9')
                                 {
                                     analiza+=" ";
 
                                 }else{
-                                    i=aux;
+                                    contador_while_analiza=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Entero");
@@ -432,12 +430,12 @@ public class Analiza extends JFrame {
                             {
 
 
-                                if(i==palbra.length() && (int)analiza.charAt(analiza.length()-1)>=(int)'0'&&(int)analiza.charAt(analiza.length()-1)<=(int)'9')
+                                if(contador_while_analiza==palbra.length() && (int)analiza.charAt(analiza.length()-1)>=(int)'0'&&(int)analiza.charAt(analiza.length()-1)<=(int)'9')
                                 {
 
 
                                 }else{
-                                    i=aux;
+                                    contador_while_analiza=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Número real");
@@ -452,11 +450,11 @@ public class Analiza extends JFrame {
                             }
                             if(estados==104)
                             {
-                                if(i==palbra.length()-1)
+                                if(contador_while_analiza==palbra.length()-1)
                                 {
 
                                 }else{
-                                    i=aux;
+                                    contador_while_analiza=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Numero con notacion cientifica");
@@ -582,7 +580,7 @@ public class Analiza extends JFrame {
                             }
                             if(estados==114)
                             {
-                                if(i==palbra.length()-1)
+                                if(contador_while_analiza==palbra.length()-1)
                                 {
                                     analiza+=" ";
 
@@ -600,12 +598,12 @@ public class Analiza extends JFrame {
                             }
                             if(estados==115)
                             {
-                                if(i==palbra.length()-1)
+                                if(contador_while_analiza==palbra.length()-1)
                                 {
                                     analiza+=" ";
 
                                 }else{
-                                    i=aux;
+                                    contador_while_analiza=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Operador relacional de igual a");
@@ -621,12 +619,12 @@ public class Analiza extends JFrame {
                             }
                             if(estados==116)
                             {
-                                if(i==palbra.length()-1)
+                                if(contador_while_analiza==palbra.length()-1)
                                 {
                                     analiza+=" ";
 
                                 }else{
-                                    i=aux;
+                                    contador_while_analiza=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Operador relacional menor que");
@@ -654,12 +652,12 @@ public class Analiza extends JFrame {
                             }
                             if(estados==119)
                             {
-                                if(i==palbra.length()-1)
+                                if(contador_while_analiza==palbra.length()-1)
                                 {
 
                                     analiza+=" ";
                                 }else{
-                                    i=aux;
+                                    contador_while_analiza=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Operador relacional mayor que");
@@ -761,6 +759,7 @@ public class Analiza extends JFrame {
                                 {
                                     bandera=true;
                                     Sintactico(Terminal);
+                                 
                                 }
                                 Terminal=0;
                             }
@@ -792,11 +791,11 @@ public class Analiza extends JFrame {
 
                             if(estados==501)
                             {
-                                if(i==palbra.length()-1)
+                                if(contador_while_analiza==palbra.length()-1)
                                 {
 
                                 }else{
-                                    i=aux;
+                                    contador_while_analiza=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Error real esperaba un numero y se recibio algo diferente");
@@ -804,11 +803,11 @@ public class Analiza extends JFrame {
                             }
                             if(estados==502)
                             {
-                                if(i==palbra.length()-1)
+                                if(contador_while_analiza==palbra.length()-1)
                                 {
 
                                 }else{
-                                    i=aux;
+                                    contador_while_analiza=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Error de notacion esperaba un + o - o digito  y se recibio algo diferente");
@@ -816,12 +815,12 @@ public class Analiza extends JFrame {
                             }
                             if(estados==503)
                             {
-                                if(i==palbra.length()-1)
+                                if(contador_while_analiza==palbra.length()-1)
                                 {
 
                                     analiza+=" ";
                                 }else{
-                                    i=aux;
+                                    contador_while_analiza=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Error notacion esperaba un numero y se recibio algo diferente");
@@ -832,11 +831,11 @@ public class Analiza extends JFrame {
                             if(estados==504)
                             {
                                 System.out.println(analiza.substring(analiza.length()-1));
-                                if(i==palbra.length())
+                                if(contador_while_analiza==palbra.length())
                                 {
                                      analiza+=" ";
                                 }else{
-                                    i=aux;
+                                    contador_while_analiza=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Error de operacion logico esperaba un & y se recibio algo diferente");
@@ -845,12 +844,12 @@ public class Analiza extends JFrame {
                             }
                             if(estados==505)
                             {
-                                if(i==palbra.length())
+                                if(contador_while_analiza==palbra.length())
                                 {
 
                                     analiza+=" ";
                                 }else{
-                                    i=aux;
+                                    contador_while_analiza=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Error de operacion logico esperaba un | y se recibio algo diferente");
@@ -859,12 +858,12 @@ public class Analiza extends JFrame {
                             }
                             if(estados==506)
                             {
-                                if(i==palbra.length())
+                                if(contador_while_analiza==palbra.length())
                                 {
                                     analiza+=" ";
 
                                 }else{
-                                    i=aux;
+                                    contador_while_analiza=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Error se espera algo diferente de comilla");
@@ -873,11 +872,11 @@ public class Analiza extends JFrame {
                             }
                             if(estados==507)
                             {
-                                if(i==palbra.length())
+                                if(contador_while_analiza==palbra.length())
                                 {
                                    analiza+=" ";
                                 }else{
-                                    i=aux;
+                                    contador_while_analiza=aux;
                                 }
                                 System.out.print(palbra);
                                 System.out.println(">-----Error se esperaba finalizar con comilla");
@@ -3386,7 +3385,7 @@ public class Analiza extends JFrame {
 
 
 
-        //Se carha la tabla Lr
+        //Se carga la tabla Lr
        int tablaLr[][]={{100,130,101,1,102},
                {3,2},
                {6,2},
