@@ -4,17 +4,18 @@ package Clases;
  * Created by jeather on 1/06/16.
  */
 public class Pila {
-
+        
+    //Atributos de la pila
     int inicioPila;
     int finalPila;
-    int Pila[];
+    int pila[];
 
     //Metodo constructor
     public Pila(int tamaño)
     {
         this.inicioPila=-1;
         this.finalPila=tamaño;
-        Pila =new int[tamaño];
+        pila =new int[tamaño];
     }//Fin del método constructor
 
 
@@ -27,12 +28,12 @@ public class Pila {
 
             } else {
                 inicioPila++;
-                Pila[inicioPila] = dato;
+                pila[inicioPila] = dato;
                 System.out.println("Dato metido: " +dato);
             }
         }catch(Exception e)
         {
-            e.printStackTrace();
+            
         }
 
     }//fin método push
@@ -49,13 +50,13 @@ public class Pila {
             }
             else
             {
-                dato = Pila[inicioPila];
+                dato = pila[inicioPila];
                 System.out.println("Dato elimiminado " + dato);
                 inicioPila--;
             }
 
         }catch (Exception e){
-            e.printStackTrace();
+            
         }
         return dato;
 
@@ -65,12 +66,7 @@ public class Pila {
     public boolean PILALLENA()
     {
 
-        if(inicioPila==finalPila-1){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return inicioPila==finalPila-1;
 
     }//Fn del método de cheque de pila llena
 
@@ -78,13 +74,7 @@ public class Pila {
     public boolean PILAVACIA()
     {
 
-        if(inicioPila==-1){
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return inicioPila==-1;
     }//Fn del método de cheque de pila llena
 
     //Método que muestra el contenido de la pila
@@ -93,7 +83,7 @@ public class Pila {
         System.out.println();
         for (int i=inicioPila; i>=0; i--)
         {
-            System.out.print(Pila[i] +" ");
+            System.out.print(pila[i] +" ");
         }
 
     }//Fin del método muestra pila
@@ -101,7 +91,7 @@ public class Pila {
     //Regresa el último valor de la pila
     public int VALOR(){
 
-        int valor = Pila[inicioPila];
+        int valor = pila[inicioPila];
         return valor;
     }
 
