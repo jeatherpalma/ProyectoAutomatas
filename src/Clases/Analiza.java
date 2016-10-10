@@ -3313,48 +3313,20 @@ public class Analiza extends JFrame {
                {128,14,139}	};
        int auxilira_token=0;
        int tokenEntrada;
-        while(true)
+       boolean bandera_while=true;
+        while(bandera_while)
         {
            //Metodo para el análisis de sintaxis
            //Pedimos un token de entrada al léxico
-            if(auxilira_token!=0)
-            {
-              tokenEntrada = auxilira_token;
-            }
-            else
-            {
-                tokenEntrada= Lexico(codigo_enviar);
-                auxilira_token =0;
-            }
-             
-            
-            System.out.println("token de entrada: " +tokenEntrada);
-             //Compara si el valor de la cima de la pila es igual al 143 y si se llego al final de los tokens analizados para salir del ciclo
-                if(pila.VALOR()==143)
-                {
-                    
-                    break;
-                }
+            tokenEntrada= Lexico(codigo_enviar.substring(0, codigo_enviar.length()-1));
+            int resultado=0;
+             //C
             try {
-                //Resultado es el valor de la tabla que se saca con el elemnto de entrada del vector y la posición de las producciones
-                int resultado = tablaProducciones[pila.VALOR()][tokenEntrada - 100];
-                //Se elimina el primer elemnto de la pila y se sacan los nuevos de la tabla lr
-                jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
-                for (int j = tablaLr[resultado - 1].length - 1; j >= 0; j--) 
-                {
-                       if (tablaLr[resultado - 1][j] == -1) 
-                       {
-
-
-                       } else
-                             {
-                               jTextAreaSintactico.append("Valor introducido a la pila: " + tablaLr[resultado - 1][j]+"\n");
-                               pila.PUSH(tablaLr[resultado - 1][j]);
-
-                             }
-
-
-                }
+    
+                while(pila.VALOR()<100)
+               {
+            	   resultado =get_valor_of_table_lr(tablaProducciones, tablaLr, tokenEntrada);
+               }
                while(pila.VALOR()>=100)
                {
                    //Compara si el valor de la cima de la pila es un elemento terminal y lo compara con el elemento terminal del vector de entrada
@@ -3366,7 +3338,9 @@ public class Analiza extends JFrame {
                     if (pila.VALOR() >= 100) {
                         jTextAreaSintactico.append("ERROR 999 DE SINTAXIS CORRIJA SU CÓDIGO");
                         JOptionPane.showMessageDialog(null, "Error","Error sintactico",JOptionPane.ERROR_MESSAGE);
+                        bandera_while=false;
                         break;
+                        
 
                     } else {
                         
@@ -3375,50 +3349,43 @@ public class Analiza extends JFrame {
                         if (resultado == 999) {
                             jTextAreaSintactico.append("ERROR 999 DE SINTAXIS CORRIJA SU CÓDIGO");
                             JOptionPane.showMessageDialog(null, "Error","Error sintactico",JOptionPane.ERROR_MESSAGE);
+                            bandera_while=false;
                             break;
                         }
-                        //Else por si no hubo error alguno
-                        else {
-                            if(pila.VALOR()>=100 && pila.VALOR()!=tokenEntrada)
-                            {
-                                jTextAreaSintactico.append("ERROR 999 DE SINTAXIS CORRIJA SU CÓDIGO");
-                                JOptionPane.showMessageDialog(null, "Error","Error sintactico",JOptionPane.ERROR_MESSAGE);
-                                break;
-                            }else{
-
-                                
-                            }
-                            //Compara si el valor de la cima de la pila es un elemento terminal y lo compara con el elemento terminal del vector de entrada
-                            if (pila.VALOR() == tokenEntrada) {
-                               jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
-                               
-                                }
-
-                        }//Fin else por si no se ha Ayado un error
+                       
 
 
 
                     }
+                }
+                //Compara si el valor de la cima de la pila es igual al 143 y si se llego al final de los tokens analizados para salir del ciclo
+                if(pila.VALOR()==143)
+                {
+                    JOptionPane.showMessageDialog(null, "Codigo correcto");
+                    bandera_while=false;
+                    break;
+                }
                    
-               }
-                tokenEntrada = Lexico(codigo_enviar);
+               
+                if(pila.VALOR()>=100)
+                {
+                    tokenEntrada = Lexico(codigo_enviar);
+                }
+                
 
                 }
             }catch (ArrayIndexOutOfBoundsException e)
             {
                 
-                e.printStackTrace();
-                jTextAreaSintactico.append("EXCEPCION: " +e+"\n");
+               jTextAreaSintactico.append("ERROR 999 DE SINTAXIS CORRIJA SU CÓDIGO");
+               break;
                
             }
         }
 
     }//Fin del método de sintaxis
     
-    public int get_token(int token)
-    {
-        return token;
-    }
+   
 
     //Método para guardar archivo
     private void save(){
@@ -3491,4 +3458,28 @@ public class Analiza extends JFrame {
 
         }
     }//Fin del método abrir
+    
+    public int get_valor_of_table_lr(int tablaProducciones[][], int tablaLr[][],int tokenEntrada)
+    {
+    	//Resultado es el valor de la tabla que se saca con el elemnto de entrada del vector y la posición de las producciones
+        int resultado = tablaProducciones[pila.VALOR()][tokenEntrada - 100];
+        //Se elimina el primer elemnto de la pila y se sacan los nuevos de la tabla lr
+        jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
+        for (int j = tablaLr[resultado - 1].length - 1; j >= 0; j--) 
+        {
+               if (tablaLr[resultado - 1][j] == -1) 
+               {
+
+
+               } else
+                     {
+                       jTextAreaSintactico.append("Valor introducido a la pila: " + tablaLr[resultado - 1][j]+"\n");
+                       pila.PUSH(tablaLr[resultado - 1][j]);
+
+                     }
+
+
+        }
+        return resultado;
+    }
 }//Fin de la clase analiza
