@@ -9,7 +9,7 @@ PRINT("Holamundo");
 ENDFOR
 STRING nombre;
 nombre ="Pedro";
-#while que imprime
+
 WHILE(contador<10)
 PRINT("Hola"+nombre);
 

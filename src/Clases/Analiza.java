@@ -647,12 +647,14 @@ public class Analiza extends JFrame {
                                 System.out.print(palbra);
                                 System.out.println(">-----Signo de agrupacion corchete abre [");
                                 jTextAreaImprime.append(analiza+">----Signo de agrupación corchete abre [\n");
+                                Terminal = 69;
                             }
                             if(estados==125)
                             {
                                 System.out.print(palbra);
                                 System.out.println(">-----Signo de agrupacion corchete cierra ]");
                                 jTextAreaImprime.append(analiza+">----Signo de agrupación corchete cierra ]\n");
+                                Terminal = 69;
                             }
                             if(estados==126)
                             {
@@ -675,6 +677,7 @@ public class Analiza extends JFrame {
                                 System.out.print(palbra);
                                 System.out.println(">-----Comentario en linea");
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1)+">----Comentario en linea\n");
+                                Terminal = 69;
                             }
                             if(estados==500)
                             {
@@ -3319,6 +3322,11 @@ public class Analiza extends JFrame {
            //Metodo para el análisis de sintaxis
            //Pedimos un token de entrada al léxico
             tokenEntrada= Lexico(codigo_enviar.substring(0, codigo_enviar.length()-1));
+            if(tokenEntrada==69)
+            {
+                tokenEntrada= Lexico(codigo_enviar.substring(0, codigo_enviar.length()-1));
+
+            }
             int resultado=0;
              //C
             try {
@@ -3378,6 +3386,7 @@ public class Analiza extends JFrame {
             {
                 
                jTextAreaSintactico.append("ERROR 999 DE SINTAXIS CORRIJA SU CÓDIGO");
+               JOptionPane.showMessageDialog(null, "Error","Error sintactico",JOptionPane.ERROR_MESSAGE);
                break;
                
             }
