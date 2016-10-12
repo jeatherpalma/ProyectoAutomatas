@@ -28,10 +28,6 @@ PRINT("Dame tu nombre");
 READ(nombre);
 IF(nombre=="Jeather")
 
-PRINT("Hola" + nombre);
-
-ELSE
-PRINT("No te conozco");
 ENDIF
 
 ENDCLASS

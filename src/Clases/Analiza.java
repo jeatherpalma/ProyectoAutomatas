@@ -264,7 +264,7 @@ public class Analiza extends JFrame {
     
     public int Lexico(String palbra)
     {
-        int Terminal=-1;
+        int Terminal=0;
         int aux=puntero_codigo-1;
         int estados = 0;
         String analiza="";
@@ -384,10 +384,11 @@ public class Analiza extends JFrame {
                                     jTextAreaImprime.append(analiza.substring(0,analiza.length()-1)+">----Identififcador\n");
                                     Terminal=130;
                                 }
-                                else
-                                {
-                                    jTextAreaImprime.append(analiza.substring(0,analiza.length()-1)+">----Palabra recervada\n");
+                                else{
+                                    jTextAreaImprime.append(analiza.substring(0,analiza.length()-1)+">----Palabra Recervada\n");
+
                                 }
+                                
 
                               
                               
@@ -3369,6 +3370,7 @@ public class Analiza extends JFrame {
                 //Compara si el valor de la cima de la pila es igual al 143 y si se llego al final de los tokens analizados para salir del ciclo
                 if(pila.VALOR()==143)
                 {
+                    jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
                     JOptionPane.showMessageDialog(null, "Codigo correcto");
                     bandera_while=false;
                     break;
