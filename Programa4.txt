@@ -1,0 +1,33 @@
+CLASS persona BEGIN
+
+INTEGER edad,contador;
+
+edad = 45;
+contador=0;
+
+
+PRINT("Es tu edad" +edad);
+
+FOR(i=0; i<10)
+
+PRINT("Holamundo");
+
+ENDFOR
+
+STRING nombre;
+nombre ="Pedro";
+
+#while que imprime
+WHILE(contador<10)
+
+PRINT("Hola"+nombre);
+
+ENDWHILE
+
+PRINT("Dame tu nombre");
+READ(nombre);
+IF(nombre=="Jeather")
+PRINT("Hola");
+ENDIF
+
+ENDCLASS
