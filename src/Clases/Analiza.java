@@ -21,7 +21,8 @@ import javax.swing.WindowConstants;
 
 public class Analiza extends JFrame {
 	Scanner sc = new Scanner(System.in);
-
+//Variable que guarda el token d eentrada
+       int tokenEntrada;
         //Jframe de la ventana principal
 	JFrame jFrame;
         /*Areas en donde se teclea el codigo y áres en donde aparece el código
@@ -60,6 +61,9 @@ public class Analiza extends JFrame {
         
         //table of symbol
         Object [][] symbols = new Object[100][5];
+        
+        //table cuadruplos
+        Object [][] cuadruplos = new Object[100][4];
         
         //APuntador de tabla simbolos
         int apuntador_tabla_simbolos=0;
@@ -780,8 +784,10 @@ public class Analiza extends JFrame {
                             {
                                 
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1).trim()+">----Error no se cerro el String\n");
+                                
                             }
-                            description = analiza.substring(0,analiza.length()-1).trim();
+                            description=analiza.trim();
+                            
         
         return Terminal;
     }
@@ -3463,7 +3469,10 @@ public class Analiza extends JFrame {
     public int get_valor_of_table_lr(int tablaProducciones[][], int tablaLr[][],int tokenEntrada)
     {
     	//Resultado es el valor de la tabla que se saca con el elemnto de entrada del vector y la posición de las producciones
+        System.out.println("Dato de la pila: " +pila.VALOR());
+        System.out.println("Token :"+ tokenEntrada);
         int resultado = tablaProducciones[pila.VALOR()][tokenEntrada - 100];
+        System.out.println("Resultado: " +resultado);
         //Se elimina el primer elemnto de la pila y se sacan los nuevos de la tabla lr
         jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
         for (int j = tablaLr[resultado - 1].length - 1; j >= 0; j--) 
@@ -3487,15 +3496,17 @@ public class Analiza extends JFrame {
     
     //Método en construcción
     public void Actions(int action,String id){
-        //Action 1001 save operating on stack of operands
+        
         switch(action)
         {
-             
+            //Action 1001 save operating on stack of operands 
             case 1001:
                 if(types.isEmpty()==false)
                 {
                   operands.add(id);   
                 }
+               
+                
                 
             break;
             //Action 1002 save type on stack of types
@@ -3503,6 +3514,7 @@ public class Analiza extends JFrame {
                 types.add(id);
             break;
             case 1003:
+            //Action 1003 create table of symbols     
                 if(types.isEmpty()==false){
                 for (Object operando : operands) {
                     symbols[apuntador_tabla_simbolos][0]=apuntador_tabla_simbolos;
@@ -3516,7 +3528,34 @@ public class Analiza extends JFrame {
                 types.clear();
                 }
             break;
+            
+            //Action 1011 push stack of operands
+            case 1011:
+                operands.add(id);
+                break;
+            //Action 1012 save operator (+,-) on stack of operators
+            case 1012:
+                operators.add(id);
+                break;
+            //Action 1013 save operator (*,/) on stack of operators
+            case 1013:
+                operators.add(id);
+                break;
+                
+            case 1014:
+                
+                    String operator = operators.remove(operators.size()-1).toString();
+                    String op1=operands.remove(operands.size()-1).toString();
+                    String op2=operands.remove(operands.size()-1).toString();
+                    cuadruplos[0][0] =operator;
+                    cuadruplos[0][1] =op1;
+                    cuadruplos[0][2] =op2;
+                    cuadruplos[0][3] ="t1";
+                    JOptionPane.showMessageDialog(null, "Opera: " +operator+" op1: " + op1+" op2: " + op2+" op1: t1 ");
+                
+                break;
         }
+        
         
     }
     //Método de sintaxis
@@ -3565,7 +3604,7 @@ public class Analiza extends JFrame {
 
 
        //Se carga la tabla Lr
-	       int tablaLr[][]={{100,130,/*Action 1001*/1001,101,1,102},
+	       int tablaLr[][]={{100,130,101,1,102},
 	               {3,2},
 	               {6,2},
 	               {7,2},
@@ -3583,7 +3622,7 @@ public class Analiza extends JFrame {
 	               {107,/*Action 1002*/1002},
 	               {125,130,/*Action 1001*/1001,5},
 	               {-1},
-	               {130,/*Action 1001*/1001,126,14,127,/*Action 1003*/1003},
+	               {130,126,14,127,/*Action 1003*/1003},
 	               {108,128,130,/*Action 1001*/1001,5,129,127,/*Action 1003*/1003},
 	               {109,128,14,9,129,127,/*Action 1003*/1003},
 	               {125,14,9},
@@ -3592,13 +3631,13 @@ public class Analiza extends JFrame {
 	               {112,1},
 	               {-1},
 	               {113,128,14,129,1,114},
-	               {115,128,130,/*Action 1001*/1001,126,14,127,/*Action 1003*/1003,14,129,1,116},
-	               {16	,15},
+	               {115,128,130,126,14,127,/*Action 1003*/1003,14,129,1,116},
+	               {16,15},
 	               {11,14},
 	               {-1},
-	               {18	,17},
+	               {18,17},
 	               {118,16},
-	               {-1	},
+	               {-1},
 	               {19	,20},
 	               {119},
 	               {-1},
@@ -3612,49 +3651,58 @@ public class Analiza extends JFrame {
 	               {131},
 	               {120},
 	               {25,24},
-	               {132,23},
-	               {133,23},
+	               {132,/*Action 1012*/1012,23,/*Action 1014*/1014},
+	               {133,/*Action 1012*/1012,23,/*Action 1014*/1014},
 	               {-1},
 	               {27,26},
-	               {134,25},
-	               {135,25},
+	               {134,/*Action 1013*/1013,25,/*Action 1014*/1014},
+	               {135,/*Action 1013*/1013,25,/*Action 1014*/1014},
 	               {-1},
-	               {130,/*Accion 1001*/1001},
-	               {136},
-	               {137},
-	               {138},
-	               {139},
-	               {140},
-	               {141},
-	               {142},
+	               {130,/*Accion 10011*/1011},
+	               {136,/*Action 1011*/1011},
+	               {137,/*Action 1011*/1011},
+	               {138,/*Action 1011*/1011},
+	               {139,/*Action 1011*/1011},
+	               {140,/*Action 1011*/1011},
+	               {141,/*Action 1011*/1011},
+	               {142,/*Action 1011*/1011},
 	               {128,14,129}
                };
-       //Variable que guarda el token d eentrada
-       int tokenEntrada;
+        
+        
+
        //Bandera para el ciclo de análisis del código
        boolean bandera_while=true;
        //While del proceso de análisi del código que se analiza
         while(bandera_while)
         {
-           //Metodo para el análisis de sintaxis
+           
            //Pedimos un token de entrada al léxico
-            tokenEntrada= Lexico(codigo_enviar.substring(0, codigo_enviar.length()-1));
-            if(tokenEntrada==69)
+           tokenEntrada= Lexico(codigo_enviar.substring(0, codigo_enviar.length()-1)); 
+           //Hay unos terminales que debemos omitir
+           if(tokenEntrada==69)
             {
                 tokenEntrada= Lexico(codigo_enviar.substring(0, codigo_enviar.length()-1));
-
             }
             //Resultado que se obtiene de la matriz predictiva si es 999 es error xD
             int resultado=0;
             
             try {
-    
                 //While que carga los datos de la tabla lr
-                while(pila.VALOR()<100)
-               {
+                 while(pila.VALOR()<100)
+                {
+                   
+                   //Mete los valores a la pila  
             	   resultado =get_valor_of_table_lr(tablaProducciones, tablaLr, tokenEntrada);
-               }
-                //While que elimina los terminales de la pila
+                   //Checa si el elemento que esta en la pila es una acción 
+                   if(pila.VALOR()>1000)
+                   {
+                       Actions(pila.VALOR(), description);
+                       jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
+                   }
+                }
+                 
+               //While que elimina los terminales de la pila
                while(pila.VALOR()>=100)
                {
                    //Compara si el valor de la cima de la pila es un elemento terminal y lo compara con el elemento terminal del vector de entrada
@@ -3671,8 +3719,6 @@ public class Analiza extends JFrame {
                         JOptionPane.showMessageDialog(null, "Error","Error sintactico",JOptionPane.ERROR_MESSAGE);
                         bandera_while=false;
                         break;
-                        
-
                     } 
                     else 
                     {
@@ -3685,37 +3731,51 @@ public class Analiza extends JFrame {
                         }
                     }
                 }
-                if(pila.VALOR()>1000)
-                {
-                    Actions(pila.VALOR(), description);
-                    jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
-                }
+                
                 
                 //Compara si el valor de la cima de la pila es igual al 143 y si se llego al final de los tokens analizados para salir del ciclo
                 if(pila.VALOR()==143)
                 {
                     jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
                     JOptionPane.showMessageDialog(null, "Codigo correcto");
+                    
+                    for(Object o : operands)
+                    {
+                        System.out.println("id: " +o);
+                    }
+                    for(Object o : operators)
+                    {
+                        System.out.println("operator: " +o);
+                    }
+                    
+                    
+                    
                     bandera_while=false;
                     break;
                 }
-                   
+                //while active of actions and remove of stack 
+                while(pila.VALOR()>1000)
+                {
+                    Actions(pila.VALOR(), description);
+                    jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
+                }//end while actions
+                
                //Si el valo de la pila es mayor a 100 se pide otro token para seguir analizando
-                if(pila.VALOR()>=100 && pila.VALOR()<1000)
+                if(pila.VALOR()>=100)
                 {
                     tokenEntrada = Lexico(codigo_enviar);
                 }
-                
-
+ 
                 }//end while of terminals
+               
             }//end try
             //Está excepción la da la tabla lr si el token n es el que seguía según las producciones
-            // devolverá un valor diferente y tirara un desbordamiento en la tabla lr
+            //devolverá un valor diferente y tirara un desbordamiento en la tabla lr
             catch (ArrayIndexOutOfBoundsException e)
             {
-                
+              
                jTextAreaSintactico.append("ERROR 999 DE SINTAXIS CORRIJA SU CÓDIGO");
-               JOptionPane.showMessageDialog(null, "Error","Error sintactico",JOptionPane.ERROR_MESSAGE);
+               JOptionPane.showMessageDialog(null, "Error","Error ",JOptionPane.ERROR_MESSAGE);
                break;
                
             }

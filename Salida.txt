@@ -1,10 +1,9 @@
-
 CLASS persona BEGIN
 
 INTEGER edad,contador;
 
 edad = 45;
-contador=0+8+(45+47);
+contador=0;
 
 
 PRINT("Es tu edad" +edad);
