@@ -341,90 +341,110 @@ public class Analiza extends JFrame {
                                 if(palabra.trim().equals("CLASS")){
 
                                     Terminal = 100;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
 
                                 }
                                 if(palabra.trim().equals("BEGIN"))
                                 {
                                     
                                     Terminal=101;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 if(palabra.trim().equals("ENDCLASS"))
                                 {
                                     Terminal=102;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 if(palabra.trim().equals("INTEGER"))
                                 {
                                     Terminal=103;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 if(palabra.trim().equals("FLOAT"))
                                 {
                                     Terminal=104;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 if(palabra.trim().equals("CHAR"))
                                 {
                                     Terminal=105;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 if(palabra.trim().equals("STRING"))
                                 {
                                     Terminal=106;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 if(palabra.trim().equals("BOOLEAN"))
                                 {
                                     Terminal=107;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 if(palabra.trim().equals("READ"))
                                 {
                                     Terminal=108;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 if(palabra.trim().equals("PRINT"))
                                 {
                                     Terminal=109;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 if(palabra.trim().equals("IF"))
                                 {
                                     Terminal=110;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 if(palabra.trim().equals("ENDIF"))
                                 {
                                     Terminal=111;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 if(palabra.trim().equals("ELSE"))
                                 {
                                     Terminal=112;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 if(palabra.trim().equals("WHILE"))
                                 {
                                     Terminal=113;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 if(palabra.trim().equals("ENDWHILE"))
                                 {
                                     Terminal=114;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 if(palabra.trim().equals("FOR"))
                                 {
                                     Terminal=115;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 if(palabra.trim().equals("ENDFOR"))
                                 {
                                     Terminal=116;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 if(palabra.trim().equals("TRUE"))
                                 {
                                     Terminal=141;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 if(palabra.trim().equals("FALSE"))
                                 {
                                     Terminal=142;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
 
                                 if(Terminal==0)
                                 {
                                     jTextAreaImprime.append(analiza.substring(0,analiza.length()-1).trim()+">----Identififcador\n");
                                     Terminal=130;
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 else{
                                     jTextAreaImprime.append(analiza.substring(0,analiza.length()-1).trim()+">----Palabra Recervada\n");
-
+                                    description=analiza.substring(0,analiza.length()-1).trim();
                                 }
                                 
 
@@ -448,7 +468,7 @@ public class Analiza extends JFrame {
                                 
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1).trim()+">----Identificador\n");
                                 Terminal=130;
-                                
+                                description=analiza.substring(0,analiza.length()-1).trim();
                                 
                             }
                             if(estados==102)
@@ -463,7 +483,7 @@ public class Analiza extends JFrame {
                                 
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1).trim()+">----Entero\n");
                                 Terminal = 136;
-                                
+                                description=analiza.substring(0,analiza.length()-1).trim();
                                 
                             }
                             System.out.println(estados);
@@ -482,7 +502,7 @@ public class Analiza extends JFrame {
                                 
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1).trim()+">----Número real\n");
                                 Terminal = 137;
-                                
+                                description=analiza.substring(0,analiza.length()-1).trim();
                             }
                             if(estados==104)
                             {
@@ -495,7 +515,7 @@ public class Analiza extends JFrame {
                               
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1).trim()+">----Número con notación cientifica\n");
                                 Terminal = 138;
-                                
+                                description=analiza.substring(0,analiza.length()-1).trim();
                             }
                             if(estados==105)
                             {
@@ -504,18 +524,19 @@ public class Analiza extends JFrame {
                                 System.out.println(">-----Operador aritmetico suma");
                                 jTextAreaImprime.append(analiza.trim()+">----Operador aritmetico suma\n");
                                 Terminal = 132;
-                                
+                                description=analiza.trim();
                             }
                             if(estados==106)
                             {
                                 jTextAreaImprime.append(analiza.trim()+">----Operador aritmetico resta\n");
                                 Terminal = 133;
-                                
+                                description=analiza.trim();
                             }
                             if(estados==107)
                             {
                                 jTextAreaImprime.append(analiza.trim()+">----Operador aritmetico multiplicación\n");
                                 Terminal = 134;
+                                description=analiza.trim();
                                 
                             }
                             if(estados==108)
@@ -523,6 +544,7 @@ public class Analiza extends JFrame {
                                 
                                 jTextAreaImprime.append(analiza.trim()+">----Operador aritmetico división\n");
                                 Terminal = 135;
+                                description=analiza.trim();
                                 
                             }
                             if(estados==109)
@@ -536,12 +558,14 @@ public class Analiza extends JFrame {
                                 
                                 jTextAreaImprime.append(analiza.trim()+">----Operador lógico AND\n");
                                 Terminal = 118;
+                                description=analiza.trim();
                                 
                             }
                             if(estados==111)
                             {
                                 jTextAreaImprime.append(analiza.trim()+">----Operador lógico OR\n");
                                 Terminal = 117;
+                                description=analiza.trim();
                                 
                             }
                             if(estados==112)
@@ -549,6 +573,7 @@ public class Analiza extends JFrame {
                                 
                                 jTextAreaImprime.append(analiza.trim()+">----Operador relacional !\n");
                                 Terminal = 119;
+                                description=analiza.trim();
                                 
                             }
                             if(estados==113)
@@ -556,6 +581,7 @@ public class Analiza extends JFrame {
                                 
                                 jTextAreaImprime.append(analiza.trim()+">----Operador relacional diferente de !=\n");
                                 Terminal = 120;
+                                description=analiza.trim();
                                 
                             }
                             if(estados==114)
@@ -568,7 +594,7 @@ public class Analiza extends JFrame {
                                 
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()).trim()+">----Operador relacional de igual a\n");
                                 Terminal = 131;
-                                
+                                description=analiza.substring(0,analiza.length()-1).trim();
                             }
                             if(estados==115)
                             {
@@ -582,7 +608,7 @@ public class Analiza extends JFrame {
                                 
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1).trim()+">----Operador relacional de asignación\n");
                                 Terminal = 126;
-                                
+                                description=analiza.substring(0,analiza.length()-1).trim();
 
                             }
                             if(estados==116)
@@ -597,13 +623,14 @@ public class Analiza extends JFrame {
                                 
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1).trim()+">----Operador relacional menor que\n");
                                 Terminal=121;
-                                
+                                description=analiza.substring(0,analiza.length()-1).trim();
                             }
                             if(estados==117)
                             {
                                 
                                 jTextAreaImprime.append(analiza.trim()+">----Operador relacional menor igual que \n");
                                 Terminal=122;
+                                description=analiza.trim();
                                 
                             }
                             if(estados==119)
@@ -618,7 +645,7 @@ public class Analiza extends JFrame {
                                 
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1).trim()+">----Operador relacional mayor que\n");
                                 Terminal=123;
-                                
+                                description=analiza.substring(0,analiza.length()-1).trim();
                             }
                             if(estados==118)
                             {
@@ -626,14 +653,14 @@ public class Analiza extends JFrame {
                                 
                                 jTextAreaImprime.append(analiza.trim()+">----Operador relacional mayor igual que\n");
                                 Terminal=124;
-                                
+                                description=analiza.trim();
                             }
                             if(estados==120)
                             {
                                 
                                 jTextAreaImprime.append(analiza.trim()+">----Constante caracter\n");
                                 Terminal=139;
-                                
+                                description=analiza.trim();
                             }
 
                             if(estados==121)
@@ -641,20 +668,21 @@ public class Analiza extends JFrame {
                                 
                                 jTextAreaImprime.append(analiza.trim()+">----Constante String\n");
                                 Terminal=140;
-                                
+                                description=analiza.trim();
                             }
                             if(estados==122)
                             {
                                 
                                 jTextAreaImprime.append(analiza.trim()+">----Signo de agrupación parentesis abre (\n");
                                 Terminal=128;
-                                
+                                description=analiza.trim();
                             }
                             if(estados==123)
                             {
                                
                                 jTextAreaImprime.append(analiza.trim()+">----Signo de agrupación parentesis cierra )\n");
                                 Terminal=129;
+                                description=analiza.trim();
                                 
                             }
                             if(estados==124)
@@ -662,6 +690,7 @@ public class Analiza extends JFrame {
                                 
                                 jTextAreaImprime.append(analiza.trim()+">----Signo de agrupación corchete abre [\n");
                                 Terminal = 69;
+                                
                             }
                             if(estados==125)
                             {
@@ -674,11 +703,13 @@ public class Analiza extends JFrame {
                                 
                                 jTextAreaImprime.append(analiza.trim()+">----Signo de puntuación punto y coma\n");
                                 Terminal=127;
+                                description=analiza.trim();
                                 
                             }
                             if(estados==127)
                             {
                                 jTextAreaImprime.append(analiza.trim()+">----Signo de puntuación coma\n");
+                                description=analiza.trim();
                                 Terminal=125;
                                 
                             }
@@ -785,8 +816,9 @@ public class Analiza extends JFrame {
                                 
                                 jTextAreaImprime.append(analiza.substring(0,analiza.length()-1).trim()+">----Error no se cerro el String\n");
                                 
+                                
                             }
-                            description=analiza.trim();
+                            
                             
         
         return Terminal;
@@ -3544,16 +3576,34 @@ public class Analiza extends JFrame {
                 
             case 1014:
                 
-                    String operator = operators.remove(operators.size()-1).toString();
-                    String op1=operands.remove(operands.size()-1).toString();
-                    String op2=operands.remove(operands.size()-1).toString();
-                    cuadruplos[0][0] =operator;
-                    cuadruplos[0][1] =op1;
-                    cuadruplos[0][2] =op2;
+                    if(operators.get(operators.size()-1).toString().equals("132") || operators.get(operators.size()-1).toString().equals("133"))
+                {
+                    String operator2 = operators.remove(operators.size()-1).toString();
+                    String op_1=operands.remove(operands.size()-1).toString();
+                    String op_2=operands.remove(operands.size()-1).toString();
+                    cuadruplos[0][0] =operator2;
+                    cuadruplos[0][1] =op_1;
+                    cuadruplos[0][2] =op_2;
                     cuadruplos[0][3] ="t1";
-                    JOptionPane.showMessageDialog(null, "Opera: " +operator+" op1: " + op1+" op2: " + op2+" op1: t1 ");
+                    JOptionPane.showMessageDialog(null, "Opera: " +operator2+" op1: " + op_1+" op2: " + op_2+" op1: t1 ");
                 
-                break;
+                   break;
+                }
+                case 1015:
+                if(operators.get(operators.size()-1).toString().equals("134") || operators.get(operators.size()-1).toString().equals("134"))
+                {
+                    String operator2 = operators.remove(operators.size()-1).toString();
+                    String op_1=operands.remove(operands.size()-1).toString();
+                    String op_2=operands.remove(operands.size()-1).toString();
+                    cuadruplos[0][0] =operator2;
+                    cuadruplos[0][1] =op_1;
+                    cuadruplos[0][2] =op_2;
+                    cuadruplos[0][3] ="t1";
+                    JOptionPane.showMessageDialog(null, "Opera: " +operator2+" op1: " + op_1+" op2: " + op_2+" op1: t1 ");
+                
+                   break;
+                }
+                    
         }
         
         
@@ -3650,13 +3700,13 @@ public class Analiza extends JFrame {
 	               {124},
 	               {131},
 	               {120},
-	               {25,24},
+	               {25,1015,24},
 	               {132,/*Action 1012*/1012,23,/*Action 1014*/1014},
 	               {133,/*Action 1012*/1012,23,/*Action 1014*/1014},
 	               {-1},
-	               {27,26},
-	               {134,/*Action 1013*/1013,25,/*Action 1014*/1014},
-	               {135,/*Action 1013*/1013,25,/*Action 1014*/1014},
+	               {27,/*Action 1015*/1015,26},
+	               {134,/*Action 1013*/1013,25},
+	               {135,/*Action 1013*/1013,25,},
 	               {-1},
 	               {130,/*Accion 10011*/1011},
 	               {136,/*Action 1011*/1011},
