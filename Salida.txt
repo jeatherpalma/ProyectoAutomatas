@@ -1,16 +1,5 @@
-CLASS persona BEGIN
-INTEGER edad,contador;
-edad = 45+86;
-contador=0;
-
-PRINT("Es tu edad" +edad);
-
-STRING nombre;
-nombre ="Pedro";
-
-WHILE(contador<10)
-PRINT("Hola"+nombre);
-
-ENDWHILE
-
+                        CLASS persona BEGIN
+IF(nombre=="JOSE" && nombre=="maria")
+PRINT("HOLA");
+ENDIF
 ENDCLASS

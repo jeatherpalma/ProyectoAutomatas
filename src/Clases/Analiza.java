@@ -592,9 +592,9 @@ public class Analiza extends JFrame {
 
                                 }
                                 
-                                jTextAreaImprime.append(analiza.substring(0,analiza.length()).trim()+">----Operador relacional de igual a\n");
+                                jTextAreaImprime.append(analiza.trim()+">----Operador relacional de igual a\n");
                                 Terminal = 131;
-                                description=analiza.substring(0,analiza.length()-1).trim();
+                                description=analiza.trim();
                             }
                             if(estados==115)
                             {
@@ -3573,10 +3573,10 @@ public class Analiza extends JFrame {
             case 1013:
                 operators.add(id);
                 break;
-                
+            //create cuadruple     
             case 1014:
-                
-                    if(operators.get(operators.size()-1).toString().equals("132") || operators.get(operators.size()-1).toString().equals("133"))
+                if(operators.get(operators.size()-1).toString().equals("+") || operators.get(operators.size()-1).toString().equals("-")|| 
+                        operators.get(operators.size()-1).toString().equals("||"))
                 {
                     String operator2 = operators.remove(operators.size()-1).toString();
                     String op_1=operands.remove(operands.size()-1).toString();
@@ -3586,11 +3586,14 @@ public class Analiza extends JFrame {
                     cuadruplos[0][2] =op_2;
                     cuadruplos[0][3] ="t1";
                     JOptionPane.showMessageDialog(null, "Opera: " +operator2+" op1: " + op_1+" op2: " + op_2+" op1: t1 ");
+                    operands.add("t1");
                 
                    break;
                 }
-                case 1015:
-                if(operators.get(operators.size()-1).toString().equals("134") || operators.get(operators.size()-1).toString().equals("134"))
+            //create cuadruple    
+            case 1015:
+                
+                if(operators.get(operators.size()-1).toString().equals("*") || operators.get(operators.size()-1).toString().equals("/"))
                 {
                     String operator2 = operators.remove(operators.size()-1).toString();
                     String op_1=operands.remove(operands.size()-1).toString();
@@ -3600,9 +3603,57 @@ public class Analiza extends JFrame {
                     cuadruplos[0][2] =op_2;
                     cuadruplos[0][3] ="t1";
                     JOptionPane.showMessageDialog(null, "Opera: " +operator2+" op1: " + op_1+" op2: " + op_2+" op1: t1 ");
-                
+                   operands.add("t1");
                    break;
                 }
+            case 1016:
+                operators.add("(");
+                break;
+            case 1017:
+                operators.remove(operators.size()-1);
+                break;
+            case 1018:
+                operators.add(id);
+                break;
+            //push or     
+            case 1020:
+                operators.add(id);
+                break;
+            //push and    
+            case 1021:
+                operators.add(id);
+                break;    
+            case 1022:
+                if(operators.get(operators.size()-1).toString().equals("||"))
+                {
+                    String operator2 = operators.remove(operators.size()-1).toString();
+                    String op_1=operands.remove(operands.size()-1).toString();
+                    String op_2=operands.remove(operands.size()-1).toString();
+                    cuadruplos[0][0] =operator2;
+                    cuadruplos[0][1] =op_1;
+                    cuadruplos[0][2] =op_2;
+                    cuadruplos[0][3] ="t1";
+                    JOptionPane.showMessageDialog(null, "Opera: " +operator2+" op1: " + op_1+" op2: " + op_2+" op1: t1 ");
+                   operands.add("t1");
+                   break;
+                }
+            case 1023:
+                if(operators.get(operators.size()-1).toString().equals("&&"))
+                {
+                    String operator2 = operators.remove(operators.size()-1).toString();
+                    String op_1=operands.remove(operands.size()-1).toString();
+                    String op_2=operands.remove(operands.size()-1).toString();
+                    cuadruplos[0][0] =operator2;
+                    cuadruplos[0][1] =op_1;
+                    cuadruplos[0][2] =op_2;
+                    cuadruplos[0][3] ="t1";
+                    JOptionPane.showMessageDialog(null, "Opera: " +operator2+" op1: " + op_1+" op2: " + op_2+" op1: t1 ");
+                   operands.add("t1");
+                   break;
+                }    
+                
+                    
+                
                     
         }
         
@@ -3673,7 +3724,7 @@ public class Analiza extends JFrame {
 	               {125,130,/*Action 1001*/1001,5},
 	               {-1},
 	               {130,126,14,127,/*Action 1003*/1003},
-	               {108,128,130,/*Action 1001*/1001,5,129,127,/*Action 1003*/1003},
+	               {108,128,130,/*Action 1001*/10011,5,129,127,/*Action 1003*/1003},
 	               {109,128,14,9,129,127,/*Action 1003*/1003},
 	               {125,14,9},
 	               {-1},
@@ -3683,30 +3734,30 @@ public class Analiza extends JFrame {
 	               {113,128,14,129,1,114},
 	               {115,128,130,126,14,127,/*Action 1003*/1003,14,129,1,116},
 	               {16,15},
-	               {11,14},
+	               {117,/*Action 1020*/1020,14,/*Action 1014*/1022},
 	               {-1},
 	               {18,17},
-	               {118,16},
+	               {118,/*Action 1021*/1021,16,/*Action 1015*/1023},
 	               {-1},
 	               {19	,20},
 	               {119},
 	               {-1},
 	               {23	,21	},
-	               {22	,23},
+	               {22,23},
 	               {-1},
-	               {121},
-	               {122},
-	               {123},
-	               {124},
-	               {131},
-	               {120},
-	               {25,1015,24},
-	               {132,/*Action 1012*/1012,23,/*Action 1014*/1014},
-	               {133,/*Action 1012*/1012,23,/*Action 1014*/1014},
+	               {121,/*Action 1018*/},
+	               {122,/*Action 1018*/},
+	               {123,/*Action 1018*/},
+	               {124,/*Action 1018*/},
+	               {131,/*Action 1018*/},
+	               {120,/*Action 1018*/},
+	               {25,24},
+	               {132/*Action 1012*/,1012,23,/*Action 1014*/1014},
+	               {133/*Action 1012*/,1012,23,/*Action 1014*/1014},
 	               {-1},
-	               {27,/*Action 1015*/1015,26},
-	               {134,/*Action 1013*/1013,25},
-	               {135,/*Action 1013*/1013,25,},
+	               {27,26},
+	               {134,/*Action 1013*/1013,25,/*Action 1015*/1015},
+	               {135,/*Action 1013*/1013,25,/*Action 1015*/1015},
 	               {-1},
 	               {130,/*Accion 10011*/1011},
 	               {136,/*Action 1011*/1011},
@@ -3716,7 +3767,7 @@ public class Analiza extends JFrame {
 	               {140,/*Action 1011*/1011},
 	               {141,/*Action 1011*/1011},
 	               {142,/*Action 1011*/1011},
-	               {128,14,129}
+	               {/*Action 1016*/1016,128,14,129,/*Action 1017*/1017}
                };
         
         
@@ -3745,7 +3796,7 @@ public class Analiza extends JFrame {
                    //Mete los valores a la pila  
             	   resultado =get_valor_of_table_lr(tablaProducciones, tablaLr, tokenEntrada);
                    //Checa si el elemento que esta en la pila es una acción 
-                   if(pila.VALOR()>1000)
+                   while(pila.VALOR()>1000)
                    {
                        Actions(pila.VALOR(), description);
                        jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
@@ -3781,6 +3832,13 @@ public class Analiza extends JFrame {
                         }
                     }
                 }
+                  //if active of actions and remove of stack 
+                if(pila.VALOR()>1000)
+                {
+                    Actions(pila.VALOR(), description);
+                    jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
+                }//end if actions
+                
                 
                 
                 //Compara si el valor de la cima de la pila es igual al 143 y si se llego al final de los tokens analizados para salir del ciclo
@@ -3803,15 +3861,9 @@ public class Analiza extends JFrame {
                     bandera_while=false;
                     break;
                 }
-                //while active of actions and remove of stack 
-                while(pila.VALOR()>1000)
-                {
-                    Actions(pila.VALOR(), description);
-                    jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
-                }//end while actions
-                
+              
                //Si el valo de la pila es mayor a 100 se pide otro token para seguir analizando
-                if(pila.VALOR()>=100)
+                if(pila.VALOR()>=100 && pila.VALOR()<1000)
                 {
                     tokenEntrada = Lexico(codigo_enviar);
                 }
@@ -3821,7 +3873,7 @@ public class Analiza extends JFrame {
             }//end try
             //Está excepción la da la tabla lr si el token n es el que seguía según las producciones
             //devolverá un valor diferente y tirara un desbordamiento en la tabla lr
-            catch (ArrayIndexOutOfBoundsException e)
+            catch (NullPointerException e)
             {
               
                jTextAreaSintactico.append("ERROR 999 DE SINTAXIS CORRIJA SU CÓDIGO");
