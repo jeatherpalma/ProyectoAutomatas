@@ -81,14 +81,14 @@ public class Analiza extends JFrame {
 		jLabelTeclea = new JLabel("Texto que será analizado");
 		jLabelTeclea.setForeground(Color.white);
         	jLabelTeclea.setFont(new Font("Arial",Font.ITALIC,15));
-		jLabelTeclea.setBounds(20,10,200,30);
+		jLabelTeclea.setBounds(30,120,200,30);
 
         try {
 		//Area en donde se teclea el código
             	jTextAreaGuarda = new JTextArea();
-            	jTextAreaGuarda.setFont(new Font("Arial", Font.BOLD, 15));
+            	jTextAreaGuarda.setFont(new Font("Arial", Font.BOLD, 12));
             	jScrollPaneGuarda = new JScrollPane(jTextAreaGuarda);
-            	jScrollPaneGuarda.setBounds(20, 50, 350, 600);
+            	jScrollPaneGuarda.setBounds(20, 150, 270, 400);
         }catch (Exception e)
         {
            
@@ -97,36 +97,36 @@ public class Analiza extends JFrame {
 		//Etiqueta que indica el áre en donde aparece los análisi del código
 		jLabelResultado = new JLabel("Texto analizado");
 		jLabelResultado.setForeground(Color.white);
-		jLabelResultado.setBounds(450,10,200,30);
+		jLabelResultado.setBounds(360,120,200,30);
         	jLabelResultado.setFont(new Font("Arial",Font.ITALIC,15));
 
 
 		//Area de impresión del análisis léxico		
 		jTextAreaImprime = new JTextArea();
         	jTextAreaImprime.setEnabled(false);
-        	jTextAreaImprime.setFont(new Font("Arial",Font.BOLD,15));
+        	jTextAreaImprime.setFont(new Font("Arial",Font.BOLD,12));
         	jTextAreaImprime.setForeground(Color.black);
 		JScrollPane jScrollPaneIMprime = new JScrollPane(jTextAreaImprime);
-		jScrollPaneIMprime.setBounds(430,50,350,600);
+		jScrollPaneIMprime.setBounds(300,150,270,400);
 
         	//Etiqueta del sintactico
         	jLabelEtiquetaSintactico = new JLabel("Análisis Sintáctico");
         	jLabelEtiquetaSintactico.setForeground(Color.white);
-        	jLabelEtiquetaSintactico.setBounds(860,10,200,30);
+        	jLabelEtiquetaSintactico.setBounds(640,120,200,30);
         	jLabelEtiquetaSintactico.setFont(new Font("Arial",Font.ITALIC,15));
         	
 		//TextArea para imprimir los resultados del sintactico
         	jTextAreaSintactico = new JTextArea();
         	jTextAreaSintactico.setEnabled(false);
-        	jTextAreaSintactico.setFont(new Font("Arial",Font.BOLD,15));
+        	jTextAreaSintactico.setFont(new Font("Arial",Font.BOLD,12));
         	jTextAreaSintactico.setForeground(Color.black);
         	jScrollPaneSintactico = new JScrollPane(jTextAreaSintactico);
-        	jScrollPaneSintactico.setBounds(840,50,380,600);
+        	jScrollPaneSintactico.setBounds(580,150,270,400);
 
 
         	//Etiqueta que nos permite meter un icono de abrir
         	JLabel jLabeAbrir = new JLabel();
-        	jLabeAbrir.setBounds(1235,50,100,100);
+        	jLabeAbrir.setBounds(20,10,100,100);
         	ImageIcon imageIconNota = new ImageIcon(getClass().getResource("/recursos/Abrir.png"));
         	ImageIcon imageIconExtrad = new ImageIcon(imageIconNota.getImage().getScaledInstance(jLabeAbrir.getWidth(),jLabeAbrir.getHeight(),Image.SCALE_SMOOTH));
         	jLabeAbrir.setIcon(imageIconExtrad);
@@ -143,7 +143,7 @@ public class Analiza extends JFrame {
 
         	//Etiqueta para borrar
         	JLabel jLabelBorra = new JLabel();
-        	jLabelBorra.setBounds(1235,200,100,100);
+        	jLabelBorra.setBounds(200,10,100,100);
 		//Se carga el icono
         	ImageIcon imageIconBorra = new ImageIcon(getClass().getResource("/recursos/eliminar.png"));
                 ImageIcon imageIconBorra2 = new ImageIcon(imageIconBorra.getImage().getScaledInstance(jLabelBorra.getWidth(),
@@ -165,7 +165,7 @@ public class Analiza extends JFrame {
 
 		//Etiqueta que sirve para añadir el icono de guardar
 		JLabel jLabelGuarda = new JLabel();
-		jLabelGuarda.setBounds(1235,350,100,100);
+		jLabelGuarda.setBounds(380,10,100,100);
 		//Se crea el icono
 		ImageIcon imageGuarda = new ImageIcon(getClass().getResource("/recursos/guardar.png"));
 		ImageIcon imageGuarda2 = new ImageIcon(imageGuarda.getImage().getScaledInstance(jLabelGuarda.getWidth(),jLabelGuarda.getHeight(),Image.SCALE_SMOOTH));
@@ -184,7 +184,7 @@ public class Analiza extends JFrame {
 
 		//Etiqueta que srive para añadir el icono de jecución
 		JLabel jLabelEjecuta = new JLabel();
-		jLabelEjecuta.setBounds(1235,500,100,100);
+		jLabelEjecuta.setBounds(560,10,100,100);
 		//Se crea el icono de ejecucion
 		ImageIcon imageEjecuta = new ImageIcon(getClass().getResource("/recursos/ejecuta.png"));
 		ImageIcon imageEjecuta2 = new ImageIcon(imageEjecuta.getImage().getScaledInstance(jLabelEjecuta.getWidth(),
@@ -3528,7 +3528,9 @@ public class Analiza extends JFrame {
     
     //Método en construcción
     public void Actions(int action,String id){
-        
+        String op1;
+        String op2;
+        String operador;
         switch(action)
         {
             //Action 1001 save operating on stack of operands 
@@ -3546,7 +3548,16 @@ public class Analiza extends JFrame {
                 types.add(id);
             break;
             case 1003:
-            //Action 1003 create table of symbols     
+            //Action 1003 create table of symbols
+                if(types.isEmpty()==false && types.get(types.size()-1).toString().equals("READ"))
+                {
+                    for (Object operando : operands) 
+                    {
+                    JOptionPane.showMessageDialog(null, "oper: OUTPUT     op1:       ope2:     resul: " +operando);
+                    }
+                    operands.clear();
+                    types.clear();
+                }
                 if(types.isEmpty()==false){
                 for (Object operando : operands) {
                     symbols[apuntador_tabla_simbolos][0]=apuntador_tabla_simbolos;
@@ -3615,6 +3626,17 @@ public class Analiza extends JFrame {
             case 1018:
                 operators.add(id);
                 break;
+            case 1019:
+                    operador = operators.remove(operators.size()-1).toString();
+                    op2=operands.remove(operands.size()-1).toString();
+                    op1=operands.remove(operands.size()-1).toString();
+                    cuadruplos[0][0] =operador;
+                    cuadruplos[0][1] =op2;
+                    cuadruplos[0][2] =op1;
+                    cuadruplos[0][3] ="t1";
+                    JOptionPane.showMessageDialog(null, "Opera: " +operador+" op1: " + op2+" op2: " + op1+" op1: t1 ");
+                   operands.add("t1");
+                break;    
             //push or     
             case 1020:
                 operators.add(id);
@@ -3638,7 +3660,8 @@ public class Analiza extends JFrame {
                    break;
                 }
             case 1023:
-                if(operators.get(operators.size()-1).toString().equals("&&"))
+                
+                if(!operators.isEmpty() && operators.get(operators.size()-1).toString().equals("&&"))
                 {
                     String operator2 = operators.remove(operators.size()-1).toString();
                     String op_1=operands.remove(operands.size()-1).toString();
@@ -3650,7 +3673,11 @@ public class Analiza extends JFrame {
                     JOptionPane.showMessageDialog(null, "Opera: " +operator2+" op1: " + op_1+" op2: " + op_2+" op1: t1 ");
                    operands.add("t1");
                    break;
-                }    
+                }
+            //push read on stack of operators    
+            case 1024:
+                types.add(id);
+                break;
                 
                     
                 
@@ -3724,7 +3751,7 @@ public class Analiza extends JFrame {
 	               {125,130,/*Action 1001*/1001,5},
 	               {-1},
 	               {130,126,14,127,/*Action 1003*/1003},
-	               {108,128,130,/*Action 1001*/10011,5,129,127,/*Action 1003*/1003},
+	               {108,/*Action 1024*/1024,128,130,/*Action 1001*/1011,5,129,127,/*Action 1003*/1003},
 	               {109,128,14,9,129,127,/*Action 1003*/1003},
 	               {125,14,9},
 	               {-1},
@@ -3734,23 +3761,23 @@ public class Analiza extends JFrame {
 	               {113,128,14,129,1,114},
 	               {115,128,130,126,14,127,/*Action 1003*/1003,14,129,1,116},
 	               {16,15},
-	               {117,/*Action 1020*/1020,14,/*Action 1014*/1022},
+	               {117,/*Action 1020*/1020,14,/*Action 1022*/1022},
 	               {-1},
 	               {18,17},
-	               {118,/*Action 1021*/1021,16,/*Action 1015*/1023},
+	               {118,/*Action 1021*/1021,16,/*Action 1023*/1023},
 	               {-1},
-	               {19	,20},
+	               {19,20},
 	               {119},
 	               {-1},
-	               {23	,21	},
-	               {22,23},
+	               {23,21	},
+	               {22,/*Action 1018*/1018,23,/*Action 1019*/1019},
 	               {-1},
-	               {121,/*Action 1018*/},
-	               {122,/*Action 1018*/},
-	               {123,/*Action 1018*/},
-	               {124,/*Action 1018*/},
-	               {131,/*Action 1018*/},
-	               {120,/*Action 1018*/},
+	               {121},
+	               {122},
+	               {123},
+	               {124},
+	               {131},
+	               {120},
 	               {25,24},
 	               {132/*Action 1012*/,1012,23,/*Action 1014*/1014},
 	               {133/*Action 1012*/,1012,23,/*Action 1014*/1014},
@@ -3792,11 +3819,11 @@ public class Analiza extends JFrame {
                 //While que carga los datos de la tabla lr
                  while(pila.VALOR()<100)
                 {
-                   
+                  
                    //Mete los valores a la pila  
             	   resultado =get_valor_of_table_lr(tablaProducciones, tablaLr, tokenEntrada);
                    //Checa si el elemento que esta en la pila es una acción 
-                   while(pila.VALOR()>1000)
+                   if(pila.VALOR()>1000)
                    {
                        Actions(pila.VALOR(), description);
                        jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
@@ -3806,6 +3833,12 @@ public class Analiza extends JFrame {
                //While que elimina los terminales de la pila
                while(pila.VALOR()>=100)
                {
+                    //if active of actions and remove of stack 
+                if(pila.VALOR()>1000)
+                {
+                    Actions(pila.VALOR(), description);
+                    jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
+                }//end if actions
                    //Compara si el valor de la cima de la pila es un elemento terminal y lo compara con el elemento terminal del vector de entrada
                 if (pila.VALOR() == tokenEntrada) 
                 {

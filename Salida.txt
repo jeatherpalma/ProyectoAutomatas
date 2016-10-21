@@ -1,5 +1,8 @@
-                        CLASS persona BEGIN
-IF(nombre=="JOSE" && nombre=="maria")
-PRINT("HOLA");
-ENDIF
+CLASS persona BEGIN
+
+INTEGER edad,contador;
+STRING nombre,apellido;
+FLOAT estatura,peso;
+BOOLEAN bandera1,bandera2;
+
 ENDCLASS
