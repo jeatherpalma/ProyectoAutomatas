@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.WindowConstants;
+import javax.swing.table.DefaultTableModel;
 
 
 
@@ -67,6 +69,20 @@ public class Analiza extends JFrame {
         
         //APuntador de tabla simbolos
         int apuntador_tabla_simbolos=0;
+        
+        //Jtable para las variables
+        JTable jtable_de_variables;
+        JScrollPane jScrollPane_para_tabla_de_variables;
+        //Modelo parea la tabla
+        DefaultTableModel defaultTableModel_variables;
+        
+        //Para los cuadruplos y presentarlos en el Jframe
+        JTable jtable_cuadruplos;
+        JScrollPane scrol_cuadruplos;
+        DefaultTableModel modelo_de_tabla_cuadruplos;
+        
+        
+        
 	public Analiza()
 	{
 		//Ventana principal
@@ -88,7 +104,7 @@ public class Analiza extends JFrame {
             	jTextAreaGuarda = new JTextArea();
             	jTextAreaGuarda.setFont(new Font("Arial", Font.BOLD, 12));
             	jScrollPaneGuarda = new JScrollPane(jTextAreaGuarda);
-            	jScrollPaneGuarda.setBounds(20, 150, 270, 400);
+            	jScrollPaneGuarda.setBounds(20, 150, 270, 450);
         }catch (Exception e)
         {
            
@@ -107,7 +123,7 @@ public class Analiza extends JFrame {
         	jTextAreaImprime.setFont(new Font("Arial",Font.BOLD,12));
         	jTextAreaImprime.setForeground(Color.black);
 		JScrollPane jScrollPaneIMprime = new JScrollPane(jTextAreaImprime);
-		jScrollPaneIMprime.setBounds(300,150,270,400);
+		jScrollPaneIMprime.setBounds(300,150,270,450);
 
         	//Etiqueta del sintactico
         	jLabelEtiquetaSintactico = new JLabel("Análisis Sintáctico");
@@ -121,7 +137,36 @@ public class Analiza extends JFrame {
         	jTextAreaSintactico.setFont(new Font("Arial",Font.BOLD,12));
         	jTextAreaSintactico.setForeground(Color.black);
         	jScrollPaneSintactico = new JScrollPane(jTextAreaSintactico);
-        	jScrollPaneSintactico.setBounds(580,150,270,400);
+        	jScrollPaneSintactico.setBounds(580,150,270,450);
+                
+                //Etiqueta de la tabla
+                JLabel etiqueta_tabla_simbolos = new JLabel("Tabla de simbolos (variables)");
+                etiqueta_tabla_simbolos.setForeground(Color.white);
+                etiqueta_tabla_simbolos.setBounds(900, 120, 270, 30);
+                etiqueta_tabla_simbolos.setFont(new Font("Arial",Font.ITALIC,15));
+                
+                //Array de columnas
+                String []columns = {"Direccion","Descripcion","Tipo","Ram","Apuntador"};
+                defaultTableModel_variables= new DefaultTableModel(columns,0);
+                //Creamos la tabla junto con su scrol
+                jtable_de_variables = new JTable(defaultTableModel_variables);
+                jtable_de_variables.setEnabled(false);
+                jScrollPane_para_tabla_de_variables = new JScrollPane(jtable_de_variables);
+                jScrollPane_para_tabla_de_variables.setBounds(870, 150, 420, 200);
+                
+                //Etiqueta de cuafruplos
+                JLabel etiqueta_tabla_cuadruplo = new JLabel("Tabla de cuadruplos");
+                etiqueta_tabla_cuadruplo.setForeground(Color.white);
+                etiqueta_tabla_cuadruplo.setBounds(900, 370, 270, 30);
+                etiqueta_tabla_cuadruplo.setFont(new Font("Arial",Font.ITALIC,15));
+                
+                //Para generar la tabla de cuadruplos en ek jframe
+                String [] columnas_cuadruplo={"Operacion","OPerando 1","OPerando 2","Resultado"};
+                modelo_de_tabla_cuadruplos = new DefaultTableModel(columnas_cuadruplo,0);
+                jtable_cuadruplos = new JTable(modelo_de_tabla_cuadruplos);
+                jtable_cuadruplos.setEnabled(false);
+                scrol_cuadruplos = new JScrollPane(jtable_cuadruplos);
+                scrol_cuadruplos.setBounds(870, 400, 420, 200);
 
 
         	//Etiqueta que nos permite meter un icono de abrir
@@ -161,6 +206,14 @@ public class Analiza extends JFrame {
                 	jTextAreaImprime.setText("");
                 	jTextAreaGuarda.setText("");
                         puntero_codigo = 0;
+                        //Limpia la tabla de simbolos
+                            apuntador_tabla_simbolos=0;
+                            
+                            for (int i = 0; i < jtable_de_variables.getRowCount(); i++) 
+                            {
+                                    defaultTableModel_variables.removeRow(i);
+                                    i-=1;
+                            }
             	}});
 
 		//Etiqueta que sirve para añadir el icono de guardar
@@ -220,8 +273,18 @@ public class Analiza extends JFrame {
 		            	} catch (IOException ex) {
 		                System.out.println("Error al escribir");
 		            }
-		            
-				
+                            //Limpia la tabla de simbolos
+                            apuntador_tabla_simbolos=0;
+                            
+                            for (int i = 0; i < jtable_de_variables.getRowCount(); i++) 
+                            {
+                                    defaultTableModel_variables.removeRow(i);
+                                    i-=1;
+                            }
+                            for (int i = 0; i < jtable_cuadruplos.getRowCount(); i++) {
+                                   modelo_de_tabla_cuadruplos.removeRow(i);
+                                   i-=1;
+                            }
 		            	Sintactico_version2();
 
 		        }
@@ -233,7 +296,11 @@ public class Analiza extends JFrame {
 		jFrame.add(jScrollPaneGuarda);
 		jFrame.add(jLabelResultado);
 		jFrame.add(jScrollPaneIMprime);
+                jFrame.add(jScrollPane_para_tabla_de_variables);
+                jFrame.add(scrol_cuadruplos);
 		jFrame.add(jScrollPaneSintactico);
+                jFrame.add(etiqueta_tabla_simbolos);
+                jFrame.add(etiqueta_tabla_cuadruplo);
 		jFrame.add(jLabelEtiquetaSintactico);
 		jFrame.add(jLabeAbrir);
 		jFrame.add(jLabelBorra);
@@ -3549,11 +3616,24 @@ public class Analiza extends JFrame {
             break;
             case 1003:
             //Action 1003 create table of symbols
+                if(types.isEmpty()==false && types.get(types.size()-1).toString().equals("PRINT"))
+                {
+                    for (Object operando : operands) 
+                    {
+                      Object[] newRow ={"OUTPUT","","",operando};
+                      modelo_de_tabla_cuadruplos.addRow(newRow);
+                    
+                    }
+                    operands.clear();
+                    types.clear();
+                }
                 if(types.isEmpty()==false && types.get(types.size()-1).toString().equals("READ"))
                 {
                     for (Object operando : operands) 
                     {
-                    JOptionPane.showMessageDialog(null, "oper: OUTPUT     op1:       ope2:     resul: " +operando);
+                      Object[] newRow ={"INPUT","","",operando};
+                      modelo_de_tabla_cuadruplos.addRow(newRow);
+                    
                     }
                     operands.clear();
                     types.clear();
@@ -3565,8 +3645,11 @@ public class Analiza extends JFrame {
                     symbols[apuntador_tabla_simbolos][2]=types.get(types.size()-1);
                     symbols[apuntador_tabla_simbolos][3]=10;
                     symbols[apuntador_tabla_simbolos][4]=apuntador_tabla_simbolos;
+                    Object [] newRow ={apuntador_tabla_simbolos,operando,types.get(types.size()-1),0,0};
+                    defaultTableModel_variables.addRow(newRow);
                     apuntador_tabla_simbolos++;
                 }
+                
                 operands.clear();
                 types.clear();
                 }
@@ -3586,8 +3669,7 @@ public class Analiza extends JFrame {
                 break;
             //create cuadruple     
             case 1014:
-                if(operators.get(operators.size()-1).toString().equals("+") || operators.get(operators.size()-1).toString().equals("-")|| 
-                        operators.get(operators.size()-1).toString().equals("||"))
+                if(operators.get(operators.size()-1).toString().equals("+") || operators.get(operators.size()-1).toString().equals("-"))
                 {
                     String operator2 = operators.remove(operators.size()-1).toString();
                     String op_1=operands.remove(operands.size()-1).toString();
@@ -3596,7 +3678,8 @@ public class Analiza extends JFrame {
                     cuadruplos[0][1] =op_1;
                     cuadruplos[0][2] =op_2;
                     cuadruplos[0][3] ="t1";
-                    JOptionPane.showMessageDialog(null, "Opera: " +operator2+" op1: " + op_1+" op2: " + op_2+" op1: t1 ");
+                    Object[] newRow ={operator2,op_1,op_2,"t1"};
+                    modelo_de_tabla_cuadruplos.addRow(newRow);
                     operands.add("t1");
                 
                    break;
@@ -3613,8 +3696,9 @@ public class Analiza extends JFrame {
                     cuadruplos[0][1] =op_1;
                     cuadruplos[0][2] =op_2;
                     cuadruplos[0][3] ="t1";
-                    JOptionPane.showMessageDialog(null, "Opera: " +operator2+" op1: " + op_1+" op2: " + op_2+" op1: t1 ");
-                   operands.add("t1");
+                    Object[] newRow ={operator2,op_1,op_2,"t1"};
+                    modelo_de_tabla_cuadruplos.addRow(newRow);
+                    operands.add("t1");
                    break;
                 }
             case 1016:
@@ -3634,8 +3718,9 @@ public class Analiza extends JFrame {
                     cuadruplos[0][1] =op2;
                     cuadruplos[0][2] =op1;
                     cuadruplos[0][3] ="t1";
-                    JOptionPane.showMessageDialog(null, "Opera: " +operador+" op1: " + op2+" op2: " + op1+" op1: t1 ");
-                   operands.add("t1");
+                    Object[] newRow ={operador,op1,op2,"t1"};
+                    modelo_de_tabla_cuadruplos.addRow(newRow);
+                    operands.add("t1");
                 break;    
             //push or     
             case 1020:
@@ -3646,7 +3731,7 @@ public class Analiza extends JFrame {
                 operators.add(id);
                 break;    
             case 1022:
-                if(operators.get(operators.size()-1).toString().equals("||"))
+                if(!operators.isEmpty() &&operators.get(operators.size()-1).toString().equals("||"))
                 {
                     String operator2 = operators.remove(operators.size()-1).toString();
                     String op_1=operands.remove(operands.size()-1).toString();
@@ -3655,8 +3740,9 @@ public class Analiza extends JFrame {
                     cuadruplos[0][1] =op_1;
                     cuadruplos[0][2] =op_2;
                     cuadruplos[0][3] ="t1";
-                    JOptionPane.showMessageDialog(null, "Opera: " +operator2+" op1: " + op_1+" op2: " + op_2+" op1: t1 ");
-                   operands.add("t1");
+                    Object[] newRow2 ={operator2,op_1,op_2,"t1"};
+                    modelo_de_tabla_cuadruplos.addRow(newRow2);
+                    operands.add("t1");
                    break;
                 }
             case 1023:
@@ -3670,12 +3756,18 @@ public class Analiza extends JFrame {
                     cuadruplos[0][1] =op_1;
                     cuadruplos[0][2] =op_2;
                     cuadruplos[0][3] ="t1";
-                    JOptionPane.showMessageDialog(null, "Opera: " +operator2+" op1: " + op_1+" op2: " + op_2+" op1: t1 ");
-                   operands.add("t1");
+                    Object[] newRow2 ={operator2,op_1,op_2,"t1"};
+                    modelo_de_tabla_cuadruplos.addRow(newRow2);                   
+                    operands.add("t1");
                    break;
                 }
             //push read on stack of operators    
             case 1024:
+                types.add(id);
+                break;
+                
+            //push read
+            case 1025:
                 types.add(id);
                 break;
                 
@@ -3752,7 +3844,7 @@ public class Analiza extends JFrame {
 	               {-1},
 	               {130,126,14,127,/*Action 1003*/1003},
 	               {108,/*Action 1024*/1024,128,130,/*Action 1001*/1011,5,129,127,/*Action 1003*/1003},
-	               {109,128,14,9,129,127,/*Action 1003*/1003},
+	               {109,/*Action 1025*/1025,128,14,9,129,127,/*Action 1003*/1003},
 	               {125,14,9},
 	               {-1},
 	               {110,128,14,129,1,11,111},

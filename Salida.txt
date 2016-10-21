@@ -5,4 +5,9 @@ STRING nombre,apellido;
 FLOAT estatura,peso;
 BOOLEAN bandera1,bandera2;
 
+READ(edad,contador);
+a=636454+664*(456*(56+45));
+
+PRINT("El resultado es",a);
+
 ENDCLASS
