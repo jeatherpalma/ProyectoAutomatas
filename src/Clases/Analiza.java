@@ -61,6 +61,7 @@ public class Analiza extends JFrame {
         //Operating
         ArrayList<Object> operands= new ArrayList<Object>();
         
+        
         //table of symbol
         Object [][] symbols = new Object[100][5];
         
@@ -81,7 +82,8 @@ public class Analiza extends JFrame {
         JScrollPane scrol_cuadruplos;
         DefaultTableModel modelo_de_tabla_cuadruplos;
         
-        
+        //Object of class Table_Symbols
+        Table_Symbols table_Symbols = new Table_Symbols();
         
 	public Analiza()
 	{
@@ -214,6 +216,27 @@ public class Analiza extends JFrame {
                                     defaultTableModel_variables.removeRow(i);
                                     i-=1;
                             }
+                            //Limpia la tabla de simbolos
+                            apuntador_tabla_simbolos=0;
+                            
+                            for (int i = 0; i < jtable_de_variables.getRowCount(); i++) 
+                            {
+                                    defaultTableModel_variables.removeRow(i);
+                                    i-=1;
+                            }
+                            for (int i = 0; i < jtable_cuadruplos.getRowCount(); i++) {
+                                   modelo_de_tabla_cuadruplos.removeRow(i);
+                                   i-=1;
+                            }
+                              types = new ArrayList<Object>();
+                              //Stack of avails
+                              avails = new ArrayList<Object>();
+                             //operators
+                             operators = new ArrayList<Object>();
+                            //jumps
+                             jumps = new ArrayList<Object>();
+                            //Operating
+                             operands= new ArrayList<Object>();
             	}});
 
 		//Etiqueta que sirve para añadir el icono de guardar
@@ -285,7 +308,16 @@ public class Analiza extends JFrame {
                                    modelo_de_tabla_cuadruplos.removeRow(i);
                                    i-=1;
                             }
-		            	Sintactico_version2();
+                              types = new ArrayList<Object>();
+                              //Stack of avails
+                              avails = new ArrayList<Object>();
+                             //operators
+                             operators = new ArrayList<Object>();
+                            //jumps
+                             jumps = new ArrayList<Object>();
+                            //Operating
+                             operands= new ArrayList<Object>();
+                             Sintactico_version2();
 
 		        }
 		    }
@@ -3594,10 +3626,11 @@ public class Analiza extends JFrame {
     
     
     //Método en construcción
-    public void Actions(int action,String id){
+    public void Actions(int action,String identificador){
         String op1;
         String op2;
         String operador;
+        String id =identificador.trim();
         switch(action)
         {
             //Action 1001 save operating on stack of operands 
@@ -3640,14 +3673,12 @@ public class Analiza extends JFrame {
                 }
                 if(types.isEmpty()==false){
                 for (Object operando : operands) {
-                    symbols[apuntador_tabla_simbolos][0]=apuntador_tabla_simbolos;
-                    symbols[apuntador_tabla_simbolos][1]=operando;
-                    symbols[apuntador_tabla_simbolos][2]=types.get(types.size()-1);
-                    symbols[apuntador_tabla_simbolos][3]=10;
-                    symbols[apuntador_tabla_simbolos][4]=apuntador_tabla_simbolos;
+                    
+                    table_Symbols.set_Elements(apuntador_tabla_simbolos, operando.toString(), types.get(types.size()-1).toString(), 0, 0);
                     Object [] newRow ={apuntador_tabla_simbolos,operando,types.get(types.size()-1),0,0};
                     defaultTableModel_variables.addRow(newRow);
                     apuntador_tabla_simbolos++;
+                    
                 }
                 
                 operands.clear();
@@ -3674,13 +3705,24 @@ public class Analiza extends JFrame {
                     String operator2 = operators.remove(operators.size()-1).toString();
                     String op_1=operands.remove(operands.size()-1).toString();
                     String op_2=operands.remove(operands.size()-1).toString();
+                    String result = avails.remove(avails.size()-1).toString();
+                    if(op_1.equals("t1") ||op_1.equals("t2") ||op_1.equals("t3") ||op_1.equals("t4"))
+                    {
+                        avails.add(op_1);
+                    }
+                    if(op_2.equals("t1") ||op_2.equals("t2") ||op_2.equals("t3") ||op_2.equals("t4"))
+                    {
+                        avails.add(op_2);
+                    }
+                    
                     cuadruplos[0][0] =operator2;
                     cuadruplos[0][1] =op_1;
                     cuadruplos[0][2] =op_2;
-                    cuadruplos[0][3] ="t1";
-                    Object[] newRow ={operator2,op_1,op_2,"t1"};
+                    cuadruplos[0][3] =result;
+                    Object[] newRow ={operator2,op_1,op_2,result};
                     modelo_de_tabla_cuadruplos.addRow(newRow);
-                    operands.add("t1");
+                    operands.add(result);
+                    types.add("INT");
                 
                    break;
                 }
@@ -3692,13 +3734,23 @@ public class Analiza extends JFrame {
                     String operator2 = operators.remove(operators.size()-1).toString();
                     String op_1=operands.remove(operands.size()-1).toString();
                     String op_2=operands.remove(operands.size()-1).toString();
+                    String result = avails.remove(avails.size()-1).toString();
+                    if(op_1.equals("t1") ||op_1.equals("t2") ||op_1.equals("t3") ||op_1.equals("t4"))
+                    {
+                        avails.add(op_1);
+                    }
+                    if(op_2.equals("t1") ||op_2.equals("t2") ||op_2.equals("t3") ||op_2.equals("t4"))
+                    {
+                        avails.add(op_2);
+                    }
                     cuadruplos[0][0] =operator2;
                     cuadruplos[0][1] =op_1;
                     cuadruplos[0][2] =op_2;
-                    cuadruplos[0][3] ="t1";
-                    Object[] newRow ={operator2,op_1,op_2,"t1"};
+                    cuadruplos[0][3] =result;
+                    Object[] newRow ={operator2,op_1,op_2,result};
                     modelo_de_tabla_cuadruplos.addRow(newRow);
-                    operands.add("t1");
+                    operands.add(result);
+                    types.add("INT");
                    break;
                 }
             case 1016:
@@ -3714,13 +3766,23 @@ public class Analiza extends JFrame {
                     operador = operators.remove(operators.size()-1).toString();
                     op2=operands.remove(operands.size()-1).toString();
                     op1=operands.remove(operands.size()-1).toString();
+                    String result = avails.remove(avails.size()-1).toString();
+                    if(op1.equals("t1") ||op1.equals("t2") ||op1.equals("t3") ||op1.equals("t4"))
+                    {
+                        avails.add(op1);
+                    }
+                    if(op2.equals("t1") ||op2.equals("t2") ||op2.equals("t3") ||op2.equals("t4"))
+                    {
+                        avails.add(op2);
+                    }
                     cuadruplos[0][0] =operador;
                     cuadruplos[0][1] =op2;
                     cuadruplos[0][2] =op1;
-                    cuadruplos[0][3] ="t1";
-                    Object[] newRow ={operador,op1,op2,"t1"};
+                    cuadruplos[0][3] =result;
+                    Object[] newRow ={operador,op1,op2,result};
                     modelo_de_tabla_cuadruplos.addRow(newRow);
-                    operands.add("t1");
+                    operands.add(result);
+                    types.add("INT");
                 break;    
             //push or     
             case 1020:
@@ -3736,13 +3798,23 @@ public class Analiza extends JFrame {
                     String operator2 = operators.remove(operators.size()-1).toString();
                     String op_1=operands.remove(operands.size()-1).toString();
                     String op_2=operands.remove(operands.size()-1).toString();
+                    String resulta = avails.remove(avails.size()-1).toString();
+                    if(op_1.equals("t1") ||op_1.equals("t2") ||op_1.equals("t3") ||op_1.equals("t4"))
+                    {
+                        avails.add(op_1);
+                    }
+                    if(op_2.equals("t1") ||op_2.equals("t2") ||op_2.equals("t3") ||op_2.equals("t4"))
+                    {
+                        avails.add(op_2);
+                    }
                     cuadruplos[0][0] =operator2;
                     cuadruplos[0][1] =op_1;
                     cuadruplos[0][2] =op_2;
-                    cuadruplos[0][3] ="t1";
-                    Object[] newRow2 ={operator2,op_1,op_2,"t1"};
+                    cuadruplos[0][3] =resulta;
+                    Object[] newRow2 ={operator2,op_1,op_2,resulta};
                     modelo_de_tabla_cuadruplos.addRow(newRow2);
-                    operands.add("t1");
+                    operands.add(resulta);
+                    types.add("INT");
                    break;
                 }
             case 1023:
@@ -3752,13 +3824,23 @@ public class Analiza extends JFrame {
                     String operator2 = operators.remove(operators.size()-1).toString();
                     String op_1=operands.remove(operands.size()-1).toString();
                     String op_2=operands.remove(operands.size()-1).toString();
+                    String result2 = avails.remove(avails.size()-1).toString();
+                    if(op_1.equals("t1") ||op_1.equals("t2") ||op_1.equals("t3") ||op_1.equals("t4"))
+                    {
+                        avails.add(op_1);
+                    }
+                    if(op_2.equals("t1") ||op_2.equals("t2") ||op_2.equals("t3") ||op_2.equals("t4"))
+                    {
+                        avails.add(op_2);
+                    }
                     cuadruplos[0][0] =operator2;
                     cuadruplos[0][1] =op_1;
                     cuadruplos[0][2] =op_2;
-                    cuadruplos[0][3] ="t1";
-                    Object[] newRow2 ={operator2,op_1,op_2,"t1"};
+                    cuadruplos[0][3] =result2;
+                    Object[] newRow2 ={operator2,op_1,op_2,result2};
                     modelo_de_tabla_cuadruplos.addRow(newRow2);                   
-                    operands.add("t1");
+                    operands.add(result2);
+                    types.add("INT");
                    break;
                 }
             //push read on stack of operators    
@@ -3771,8 +3853,29 @@ public class Analiza extends JFrame {
                 types.add(id);
                 break;
                 
-                    
-                
+           //push identificador asigna
+            case 1026:
+                String tipo = table_Symbols.declarado_identificador(id);
+                if(tipo!=null)
+                {
+                    types.add(tipo);
+                    operands.add(id);
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Error id no declarado","Error",JOptionPane.ERROR_MESSAGE);
+                }
+                break;
+            
+             //Cuadruplo de asigna
+            case 1027:
+                String tipo_exp = types.remove(types.size()-1).toString();
+                String tipo_res = types.remove(types.size()-1).toString();
+                String ope_exp =  operands.remove(operands.size()-1).toString();
+                String ope_res =  operands.remove(operands.size()-1).toString();
+                Object[] newRow2 ={"=","",ope_exp,ope_res};
+                modelo_de_tabla_cuadruplos.addRow(newRow2);
+                break;
                     
         }
         
@@ -3792,34 +3895,34 @@ public class Analiza extends JFrame {
          jTextAreaSintactico.append("Valor introducido a la pila: " + 0+"\n");
         //Tabla de producciones
         int tablaProducciones[][]={{1,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
-	    		   {999,999,999,2,2,2,2,2,4,5,6,999,999,7,999,8,999,999,999,999,999,999,999,999,999,999,999,999,999,999,3,999,999,999,999,999,999,999,999,999,999,999,999,999},
-	    		   {999,999,10,9,9,9,9,9,9,9,9,10,10,9,10,9,10,999,999,999,999,999,999,999,999,999,999,999,999,999,9,999,999,999,999,999,999,999,999,999,999,999,999,999},
-	    		           {999,999,999,11,11,11,11,11,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
-	    		              {999,999,999,12,13,14,15,16,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,17,999,18,999,18,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,19,999,999,999,999,999,999,999,999,999,999,999,999,999},
-	    		              {999,999,999,999,999,999,999,999,20,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
-	    		              {999,999,999,999,999,999,999,999,999,21,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,22,999,999,999,23,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
-	    		              {999,999,999,999,999,999,999,999,999,999,24,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,26,25,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,27,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,28,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,29,999,999,999,999,999,999,999,999,29,999,29,999,999,999,999,999,29,29,29,29,29,29,29},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,30,999,999,999,999,999,999,999,31,999,31,999,31,999,999,999,999,999,999,999,999,999,999,999,999,999},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,32,999,32,999,999,999,999,999,32,32,32,32,32,32,32},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,34,33,999,999,999,999,999,999,34,999,34,999,34,999,999,999,999,999,999,999,999,999,999,999,999,999},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,35,999,999,999,999,999,999,999,35,999,35,999,999,999,999,999,35,35,35,35,35,35,35},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,36,999,999,999,999,999,999,999,999,37,999,37,999,999,999,999,999,37,37,37,37,37,37,37},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,38,999,38,999,999,999,999,999,38,38,38,38,38,38,38},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,40,40,999,39,39,39,39,39,40,999,40,999,40,999,39,999,999,999,999,999,999,999,999,999,999,999},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,46,41,42,43,44,999,999,999,999,999,999,45,999,999,999,999,999,999,999,999,999,999,999},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,47,999,47,999,999,999,999,999,47,47,47,47,47,47,47},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,50,50,999,50,50,50,50,50,50,999,50,999,50,999,50,48,49,999,999,999,999,999,999,999,999,999},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,51,999,51,999,999,999,999,999,51,51,51,51,51,51,51,999},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,54,54,999,54,54,54,54,54,54,999,54,999,54,999,54,54,54,52,53,999,999,999,999,999,999,999},
-	    		              {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,63,999,55,999,999,999,999,999,56,57,58,59,60,61,62}
-	    		      };
+            {999,999,999,2,2,2,2,2,4,5,6,999,999,7,999,8,999,999,999,999,999,999,999,999,999,999,999,999,999,999,3,999,999,999,999,999,999,999,999,999,999,999,999,999},
+            {999,999,10,9,9,9,9,9,9,9,9,10,10,9,10,9,10,999,999,999,999,999,999,999,999,999,999,999,999,999,9,999,999,999,999,999,999,999,999,999,999,999,999,999},
+            {999,999,999,11,11,11,11,11,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
+            {999,999,999,12,13,14,15,16,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,17,999,18,999,18,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,19,999,999,999,999,999,999,999,999,999,999,999,999,999},
+            {999,999,999,999,999,999,999,999,20,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
+            {999,999,999,999,999,999,999,999,999,21,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,22,999,999,999,23,999,999,999,999,999,999,999,999,999,999,999,999,999,999},
+            {999,999,999,999,999,999,999,999,999,999,24,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,},
+            {999,999,999,999,999,999,999,999,999,999,999,26,25,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,27,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,28,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,29,999,999,999,999,999,999,999,999,29,999,29,999,999,999,999,999,29,29,29,29,29,29,29,},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,30,999,999,999,999,999,999,999,31,999,31,999,31,999,999,999,999,999,999,999,999,999,999,999,999,999,},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,32/*CAMBIO*/,999,999,999,999,999,999,999,999,32,999,32,999,999,999,999,999,32,32,32,32,32,32,32,},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,34,33,999,999,999,999,999,999,34,999,34,999,34,999,999,999,999,999,999,999,999,999,999,999,999,999,},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,35/*CAMBIO*/,35,999,999,999,999,999,999,999,35,999,35,999,999,999,999,999,35,35,35,35,35,35,35,},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,36,999,999,999,999,999,999,999,999,37,999,37,999,999,999,999,999,37,37,37,37,37,37,37,},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,37/*CAMBIO*/,38,999,38,999,999,999,999,999,38,38,38,38,38,38,38,},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,40,40,999,39,39,39,39,39,40,999,40,999,40,999,39,999,999,999,999,999,999,999,999,999,999,999,},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,46,41,42,43,44,999,999,999,999,999,999,45,999,999,999,999,999,999,999,999,999,999,999,},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,47,999,47,999,999,999,999,999,47,47,47,47,47,47,47,},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,50,50,999,50,50,50,50,50,50,999,50,999,50,999,50,48,49,999,999,999,999,999,999,999,999,999,},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,51,999,51,999,999,999,999,999,51,51,51,51,51,51,51,999},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,54,54,999,54,54,54,54,54,54,999,54,999,54,999,54,54,54,52,53,999,999,999,999,999,999,999,},
+            {999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,63,999,55,999,999,999,999,999,56,57,58,59,60,61,62,}
+    };
 
 
 
@@ -3842,7 +3945,7 @@ public class Analiza extends JFrame {
 	               {107,/*Action 1002*/1002},
 	               {125,130,/*Action 1001*/1001,5},
 	               {-1},
-	               {130,126,14,127,/*Action 1003*/1003},
+	               {130,/*Action 1026*/1026,126,14,127/*Action 1027*/,1027},
 	               {108,/*Action 1024*/1024,128,130,/*Action 1001*/1011,5,129,127,/*Action 1003*/1003},
 	               {109,/*Action 1025*/1025,128,14,9,129,127,/*Action 1003*/1003},
 	               {125,14,9},
@@ -3889,7 +3992,11 @@ public class Analiza extends JFrame {
 	               {/*Action 1016*/1016,128,14,129,/*Action 1017*/1017}
                };
         
-        
+        //add to temporals on stack of avails
+        avails.add("t4");
+        avails.add("t3");
+        avails.add("t2");
+        avails.add("t1");
 
        //Bandera para el ciclo de análisis del código
        boolean bandera_while=true;
@@ -3925,12 +4032,13 @@ public class Analiza extends JFrame {
                //While que elimina los terminales de la pila
                while(pila.VALOR()>=100)
                {
-                    //if active of actions and remove of stack 
+                   //if active of actions and remove of stack 
                 if(pila.VALOR()>1000)
                 {
                     Actions(pila.VALOR(), description);
                     jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
                 }//end if actions
+                    //end if actions
                    //Compara si el valor de la cima de la pila es un elemento terminal y lo compara con el elemento terminal del vector de entrada
                 if (pila.VALOR() == tokenEntrada) 
                 {
@@ -3998,7 +4106,7 @@ public class Analiza extends JFrame {
             }//end try
             //Está excepción la da la tabla lr si el token n es el que seguía según las producciones
             //devolverá un valor diferente y tirara un desbordamiento en la tabla lr
-            catch (NullPointerException e)
+            catch (ArrayIndexOutOfBoundsException e)
             {
               
                jTextAreaSintactico.append("ERROR 999 DE SINTAXIS CORRIJA SU CÓDIGO");
