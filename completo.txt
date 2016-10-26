@@ -1,0 +1,15 @@
+CLASS persona BEGIN
+
+INTEGER edad,contador;
+edad=45+65+58*65*87*(4+6);
+
+STRING nombre;
+
+PRINT("Teclea tu nombre");
+
+READ(nombre);
+
+
+BOOLEAN bandera;
+bandera="STRING";
+ENDCLASS

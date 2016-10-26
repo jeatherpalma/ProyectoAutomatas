@@ -1,14 +1,5 @@
-CLASS persona BEGIN
-
-INTEGER edad,contador;
-edad=45*(45+65/(56-98));
-
-STRING nombre;
-
-PRINT("Tu nombre");
-READ(nombre);
-
-nombre ="Hola"+nombre;
-PRINT(nombre);
-
+CLASS yo BEGIN
+IF(nombre=="pepe" && nombre=="ana")
+PRINT("hola");
+ENDIF
 ENDCLASS

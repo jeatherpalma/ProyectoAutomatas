@@ -1,0 +1,4 @@
+CLASS persona BEGIN
+INTEGER pepe;
+pepe=45+65+58*65*87*(4+6);
+ENDCLASS

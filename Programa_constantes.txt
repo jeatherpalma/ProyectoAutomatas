@@ -1,0 +1,12 @@
+CLASS persona BEGIN
+INTEGER edad,contador,sumador;
+edad = 45;
+contador=0;
+
+STRING nombre;
+nombre="JEATHER";
+
+BOOLEAN bandera;
+bandera=TRUE;
+bandera=FALSE;
+ENDCLASS

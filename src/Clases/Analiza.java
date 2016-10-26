@@ -70,12 +70,20 @@ public class Analiza extends JFrame {
         
         //APuntador de tabla simbolos
         int apuntador_tabla_simbolos=0;
+        //Apuntador de la tabla de constantes
+        int apuntador_tabla_constantes=0;
         
         //Jtable para las variables
         JTable jtable_de_variables;
         JScrollPane jScrollPane_para_tabla_de_variables;
         //Modelo parea la tabla
         DefaultTableModel defaultTableModel_variables;
+        
+        //Jtable para las constantes
+        JTable jtable_de_constantes;
+        JScrollPane jScrollPane_para_tabla_de_constantes;
+        //Modelo parea la tabla
+        DefaultTableModel defaultTableModel_constantes;
         
         //Para los cuadruplos y presentarlos en el Jframe
         JTable jtable_cuadruplos;
@@ -84,6 +92,8 @@ public class Analiza extends JFrame {
         
         //Object of class Table_Symbols
         Table_Symbols table_Symbols = new Table_Symbols();
+        //Object of class Table_const
+        Table_constan table_const = new Table_constan();
         
 	public Analiza()
 	{
@@ -144,7 +154,7 @@ public class Analiza extends JFrame {
                 //Etiqueta de la tabla
                 JLabel etiqueta_tabla_simbolos = new JLabel("Tabla de simbolos (variables)");
                 etiqueta_tabla_simbolos.setForeground(Color.white);
-                etiqueta_tabla_simbolos.setBounds(900, 120, 270, 30);
+                etiqueta_tabla_simbolos.setBounds(900, 20, 270, 30);
                 etiqueta_tabla_simbolos.setFont(new Font("Arial",Font.ITALIC,15));
                 
                 //Array de columnas
@@ -154,12 +164,28 @@ public class Analiza extends JFrame {
                 jtable_de_variables = new JTable(defaultTableModel_variables);
                 jtable_de_variables.setEnabled(false);
                 jScrollPane_para_tabla_de_variables = new JScrollPane(jtable_de_variables);
-                jScrollPane_para_tabla_de_variables.setBounds(870, 150, 420, 200);
+                jScrollPane_para_tabla_de_variables.setBounds(870, 50, 420, 200);
+                
+                //Etiqueta de la tabla constantes
+                JLabel etiqueta_tabla_constantes = new JLabel("Tabla de simbolos (constantes)");
+                etiqueta_tabla_constantes.setForeground(Color.white);
+                etiqueta_tabla_constantes.setBounds(900, 510, 270, 30);
+                etiqueta_tabla_constantes.setFont(new Font("Arial",Font.ITALIC,15));
+                
+                //Array de columnas
+                String []columns_cons = {"Direccion","Descripcion","Tipo","Ram","Apuntador"};
+                //Modelo de la tabla constantes
+                defaultTableModel_constantes= new DefaultTableModel(columns_cons,0);
+                //Creamos la tabla de constantes junto con su scrol
+                jtable_de_constantes = new JTable(defaultTableModel_constantes);
+                jtable_de_constantes.setEnabled(false);
+                jScrollPane_para_tabla_de_constantes = new JScrollPane(jtable_de_constantes);
+                jScrollPane_para_tabla_de_constantes.setBounds(870, 540, 420, 200);
                 
                 //Etiqueta de cuafruplos
                 JLabel etiqueta_tabla_cuadruplo = new JLabel("Tabla de cuadruplos");
                 etiqueta_tabla_cuadruplo.setForeground(Color.white);
-                etiqueta_tabla_cuadruplo.setBounds(900, 370, 270, 30);
+                etiqueta_tabla_cuadruplo.setBounds(900, 270, 270, 30);
                 etiqueta_tabla_cuadruplo.setFont(new Font("Arial",Font.ITALIC,15));
                 
                 //Para generar la tabla de cuadruplos en ek jframe
@@ -168,7 +194,7 @@ public class Analiza extends JFrame {
                 jtable_cuadruplos = new JTable(modelo_de_tabla_cuadruplos);
                 jtable_cuadruplos.setEnabled(false);
                 scrol_cuadruplos = new JScrollPane(jtable_cuadruplos);
-                scrol_cuadruplos.setBounds(870, 400, 420, 200);
+                scrol_cuadruplos.setBounds(870, 300, 420, 200);
 
 
         	//Etiqueta que nos permite meter un icono de abrir
@@ -218,7 +244,8 @@ public class Analiza extends JFrame {
                             }
                             //Limpia la tabla de simbolos
                             apuntador_tabla_simbolos=0;
-                            
+                            apuntador_tabla_constantes=0;
+                            //clear of all tables in window
                             for (int i = 0; i < jtable_de_variables.getRowCount(); i++) 
                             {
                                     defaultTableModel_variables.removeRow(i);
@@ -227,6 +254,11 @@ public class Analiza extends JFrame {
                             for (int i = 0; i < jtable_cuadruplos.getRowCount(); i++) {
                                    modelo_de_tabla_cuadruplos.removeRow(i);
                                    i-=1;
+                            }
+                            for (int i = 0; i < jtable_de_constantes.getRowCount(); i++) 
+                            {
+                                    defaultTableModel_constantes.removeRow(i);
+                                    i-=1;
                             }
                               types = new ArrayList<Object>();
                               //Stack of avails
@@ -298,7 +330,7 @@ public class Analiza extends JFrame {
 		            }
                             //Limpia la tabla de simbolos
                             apuntador_tabla_simbolos=0;
-                            
+                            apuntador_tabla_constantes=0;
                             for (int i = 0; i < jtable_de_variables.getRowCount(); i++) 
                             {
                                     defaultTableModel_variables.removeRow(i);
@@ -307,6 +339,11 @@ public class Analiza extends JFrame {
                             for (int i = 0; i < jtable_cuadruplos.getRowCount(); i++) {
                                    modelo_de_tabla_cuadruplos.removeRow(i);
                                    i-=1;
+                            }
+                            for (int i = 0; i < jtable_de_constantes.getRowCount(); i++) 
+                            {
+                                    defaultTableModel_constantes.removeRow(i);
+                                    i-=1;
                             }
                               types = new ArrayList<Object>();
                               //Stack of avails
@@ -329,9 +366,11 @@ public class Analiza extends JFrame {
 		jFrame.add(jLabelResultado);
 		jFrame.add(jScrollPaneIMprime);
                 jFrame.add(jScrollPane_para_tabla_de_variables);
+                jFrame.add(jScrollPane_para_tabla_de_constantes);
                 jFrame.add(scrol_cuadruplos);
 		jFrame.add(jScrollPaneSintactico);
                 jFrame.add(etiqueta_tabla_simbolos);
+                jFrame.add(etiqueta_tabla_constantes);
                 jFrame.add(etiqueta_tabla_cuadruplo);
 		jFrame.add(jLabelEtiquetaSintactico);
 		jFrame.add(jLabeAbrir);
@@ -670,9 +709,10 @@ public class Analiza extends JFrame {
                             if(estados==112)
                             {
                                 
-                                jTextAreaImprime.append(analiza.trim()+">----Operador relacional !\n");
+                                jTextAreaImprime.append(analiza.substring(0,analiza.length()-1).trim()+">----Operador relacional !\n");
                                 Terminal = 119;
-                                description=analiza.trim();
+                                puntero_codigo=aux;
+                               description=analiza.substring(0,analiza.length()-1).trim();
                                 
                             }
                             if(estados==113)
@@ -3626,7 +3666,7 @@ public class Analiza extends JFrame {
     
     
     //Método en construcción
-    public void Actions(int action,String identificador){
+    public void Actions(int action,String identificador,int terminal){
         String op1;
         String op2;
         String operador;
@@ -3649,7 +3689,8 @@ public class Analiza extends JFrame {
             break;
             case 1003:
             //Action 1003 create table of symbols
-                if(types.isEmpty()==false && types.get(types.size()-1).toString().equals("PRINT"))
+                
+                if(!types.isEmpty() && types.get(types.size()-2).toString().equals("PRINT"))
                 {
                     for (Object operando : operands) 
                     {
@@ -3659,7 +3700,8 @@ public class Analiza extends JFrame {
                     }
                     operands.clear();
                     types.clear();
-                }
+                }else
+                
                 if(types.isEmpty()==false && types.get(types.size()-1).toString().equals("READ"))
                 {
                     for (Object operando : operands) 
@@ -3670,7 +3712,7 @@ public class Analiza extends JFrame {
                     }
                     operands.clear();
                     types.clear();
-                }
+                }else
                 if(types.isEmpty()==false){
                 for (Object operando : operands) {
                     
@@ -3700,11 +3742,12 @@ public class Analiza extends JFrame {
                 break;
             //create cuadruple     
             case 1014:
+                 if(!operators.isEmpty()){
                 if(operators.get(operators.size()-1).toString().equals("+") || operators.get(operators.size()-1).toString().equals("-"))
                 {
                     String operator2 = operators.remove(operators.size()-1).toString();
-                    String op_1=operands.remove(operands.size()-1).toString();
                     String op_2=operands.remove(operands.size()-1).toString();
+                    String op_1=operands.remove(operands.size()-1).toString();
                     String result = avails.remove(avails.size()-1).toString();
                     if(op_1.equals("t1") ||op_1.equals("t2") ||op_1.equals("t3") ||op_1.equals("t4"))
                     {
@@ -3722,18 +3765,20 @@ public class Analiza extends JFrame {
                     Object[] newRow ={operator2,op_1,op_2,result};
                     modelo_de_tabla_cuadruplos.addRow(newRow);
                     operands.add(result);
-                    types.add("INT");
+                    types.add("INTEGER")/*Añadido así por que falta comprobar el tipo*/;
                 
-                   break;
+                   
                 }
+                 }
+                 break;
             //create cuadruple    
             case 1015:
-                
+                if(!operators.isEmpty()){
                 if(operators.get(operators.size()-1).toString().equals("*") || operators.get(operators.size()-1).toString().equals("/"))
                 {
                     String operator2 = operators.remove(operators.size()-1).toString();
-                    String op_1=operands.remove(operands.size()-1).toString();
                     String op_2=operands.remove(operands.size()-1).toString();
+                    String op_1=operands.remove(operands.size()-1).toString();
                     String result = avails.remove(avails.size()-1).toString();
                     if(op_1.equals("t1") ||op_1.equals("t2") ||op_1.equals("t3") ||op_1.equals("t4"))
                     {
@@ -3750,9 +3795,11 @@ public class Analiza extends JFrame {
                     Object[] newRow ={operator2,op_1,op_2,result};
                     modelo_de_tabla_cuadruplos.addRow(newRow);
                     operands.add(result);
-                    types.add("INT");
-                   break;
+                    types.add("INTEGER")/*Añadido así por que falta comprobar el tipo*/;
+                   
                 }
+                }
+                break;
             case 1016:
                 operators.add("(");
                 break;
@@ -3782,7 +3829,7 @@ public class Analiza extends JFrame {
                     Object[] newRow ={operador,op1,op2,result};
                     modelo_de_tabla_cuadruplos.addRow(newRow);
                     operands.add(result);
-                    types.add("INT");
+                    types.add("INTEGER")/*Añadido así por que falta comprobar el tipo*/;
                 break;    
             //push or     
             case 1020:
@@ -3793,7 +3840,8 @@ public class Analiza extends JFrame {
                 operators.add(id);
                 break;    
             case 1022:
-                if(!operators.isEmpty() &&operators.get(operators.size()-1).toString().equals("||"))
+                if(!operators.isEmpty()){
+                if(operators.get(operators.size()-1).toString().equals("||"))
                 {
                     String operator2 = operators.remove(operators.size()-1).toString();
                     String op_1=operands.remove(operands.size()-1).toString();
@@ -3815,11 +3863,13 @@ public class Analiza extends JFrame {
                     modelo_de_tabla_cuadruplos.addRow(newRow2);
                     operands.add(resulta);
                     types.add("INT");
-                   break;
+                   
                 }
+                }
+                break;
             case 1023:
-                
-                if(!operators.isEmpty() && operators.get(operators.size()-1).toString().equals("&&"))
+                if(!operators.isEmpty()){
+                if (operators.get(operators.size()-1).toString().equals("&&"))
                 {
                     String operator2 = operators.remove(operators.size()-1).toString();
                     String op_1=operands.remove(operands.size()-1).toString();
@@ -3841,8 +3891,10 @@ public class Analiza extends JFrame {
                     modelo_de_tabla_cuadruplos.addRow(newRow2);                   
                     operands.add(result2);
                     types.add("INT");
-                   break;
+                   
                 }
+                }
+                break;
             //push read on stack of operators    
             case 1024:
                 types.add(id);
@@ -3875,6 +3927,62 @@ public class Analiza extends JFrame {
                 String ope_res =  operands.remove(operands.size()-1).toString();
                 Object[] newRow2 ={"=","",ope_exp,ope_res};
                 modelo_de_tabla_cuadruplos.addRow(newRow2);
+                break;
+                
+             //Case para constantes
+            case 1028:
+                
+                operands.add(id);
+                String tipo_table="";
+                switch(terminal)
+                {
+                    case 140:
+                    tipo_table="STRING";
+                    
+                    break;
+                    case 139:
+                    tipo_table="CHARACTER";
+                    
+                    break;
+                    case 141:
+                    tipo_table="BOOLEAN";
+                    
+                    break;
+                    case 142:
+                    tipo_table="BOOLEAN";
+                   
+                    break;
+                    case 136:
+                    tipo_table="INTEGER";
+                    
+                    break;
+                    case 137:
+                    tipo_table="FLOAT";
+                    
+                    break;
+                    case 138:
+                    tipo_table="FLOAT";
+                    
+                    break;
+                }
+                table_const.set_Elements(apuntador_tabla_constantes, id, tipo_table, 0, 0);
+                Object [] new_Row ={apuntador_tabla_constantes,id,tipo_table,0,0};
+                defaultTableModel_constantes.addRow(new_Row);
+                apuntador_tabla_constantes++;
+                types.add(tipo_table);
+                break;
+           
+            
+            case 1029:
+                operators.add(id);
+                break;
+            case 1030:
+                if(!operators.isEmpty()){
+                if(operators.get(operators.size()-1).toString().equals("!")){
+                Object[] new_Row2 ={"NOT","","",operands.get(operands.size()-1)};
+                 modelo_de_tabla_cuadruplos.addRow(new_Row2);
+                }
+                }
                 break;
                     
         }
@@ -3927,7 +4035,8 @@ public class Analiza extends JFrame {
 
 
        //Se carga la tabla Lr
-	       int tablaLr[][]={{100,130,101,1,102},
+	       int tablaLr[][]={
+                       {100,130,101,1,102},
 	               {3,2},
 	               {6,2},
 	               {7,2},
@@ -3945,24 +4054,24 @@ public class Analiza extends JFrame {
 	               {107,/*Action 1002*/1002},
 	               {125,130,/*Action 1001*/1001,5},
 	               {-1},
-	               {130,/*Action 1026*/1026,126,14,127/*Action 1027*/,1027},
+	               {130,/*Action 1026*/1026,126,14,/*Action 1030*/1030,127/*Action 1027*/,1027},
 	               {108,/*Action 1024*/1024,128,130,/*Action 1001*/1011,5,129,127,/*Action 1003*/1003},
-	               {109,/*Action 1025*/1025,128,14,9,129,127,/*Action 1003*/1003},
+	               {109,/*Action 1025*/1025,128,14,/*Action 1030*/1030,9,129,127,/*Action 1003*/1003},
 	               {125,14,9},
 	               {-1},
-	               {110,128,14,129,1,11,111},
+	               {110,128,14,/*Action 1030*/1030,129,1,11,111},
 	               {112,1},
 	               {-1},
 	               {113,128,14,129,1,114},
-	               {115,128,130,126,14,127,/*Action 1003*/1003,14,129,1,116},
+	               {115,128,130,126,14,127,/*Action 1003*/1003,14,/*Action 1030*/1030,129,1,116},
 	               {16,15},
-	               {117,/*Action 1020*/1020,14,/*Action 1022*/1022},
+	               {117,/*Action 1020*/1020,14,/*Action 1030*/1030},
 	               {-1},
-	               {18,17},
-	               {118,/*Action 1021*/1021,16,/*Action 1023*/1023},
+	               {18,17,/*Action 1022*/1022},
+	               {118,/*Action 1021*/1021,16},
 	               {-1},
-	               {19,20},
-	               {119},
+	               {19,/*Action 1023*/1023,20},
+	               {119/*Action 1029*/,1029},
 	               {-1},
 	               {23,21	},
 	               {22,/*Action 1018*/1018,23,/*Action 1019*/1019},
@@ -3973,22 +4082,22 @@ public class Analiza extends JFrame {
 	               {124},
 	               {131},
 	               {120},
-	               {25,24},
-	               {132/*Action 1012*/,1012,23,/*Action 1014*/1014},
-	               {133/*Action 1012*/,1012,23,/*Action 1014*/1014},
+	               {25,/*Action 1014*/1014,24},
+	               {132/*Action 1012*/,1012,23},
+	               {133/*Action 1012*/,1012,23},
 	               {-1},
-	               {27,26},
-	               {134,/*Action 1013*/1013,25,/*Action 1015*/1015},
-	               {135,/*Action 1013*/1013,25,/*Action 1015*/1015},
+	               {27,/*Action 1015*/1015,26},
+	               {134,/*Action 1013*/1013,25},
+	               {135,/*Action 1013*/1013,25},
 	               {-1},
 	               {130,/*Accion 10011*/1011},
-	               {136,/*Action 1011*/1011},
-	               {137,/*Action 1011*/1011},
-	               {138,/*Action 1011*/1011},
-	               {139,/*Action 1011*/1011},
-	               {140,/*Action 1011*/1011},
-	               {141,/*Action 1011*/1011},
-	               {142,/*Action 1011*/1011},
+	               {136,/*Action 1028*/1028},
+	               {137,/*Action 1028*/1028},
+	               {138,/*Action 1028*/1028},
+	               {139,/*Action 1028*/1028},
+	               {140,/*Action 1028*/1028},
+	               {141,/*Action 1028*/1028},
+	               {142,/*Action 1028*/1028},
 	               {/*Action 1016*/1016,128,14,129,/*Action 1017*/1017}
                };
         
@@ -4018,13 +4127,19 @@ public class Analiza extends JFrame {
                 //While que carga los datos de la tabla lr
                  while(pila.VALOR()<100)
                 {
+                    //Checa si el elemento que esta en la pila es una acción 
+                   if(pila.VALOR()>1000)
+                   {
+                       Actions(pila.VALOR(), description,tokenEntrada);
+                       jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
+                   }
                   
                    //Mete los valores a la pila  
             	   resultado =get_valor_of_table_lr(tablaProducciones, tablaLr, tokenEntrada);
                    //Checa si el elemento que esta en la pila es una acción 
                    if(pila.VALOR()>1000)
                    {
-                       Actions(pila.VALOR(), description);
+                       Actions(pila.VALOR(), description,tokenEntrada);
                        jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
                    }
                 }
@@ -4032,12 +4147,12 @@ public class Analiza extends JFrame {
                //While que elimina los terminales de la pila
                while(pila.VALOR()>=100)
                {
-                   //if active of actions and remove of stack 
-                if(pila.VALOR()>1000)
-                {
-                    Actions(pila.VALOR(), description);
-                    jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
-                }//end if actions
+                   //Checa si el elemento que esta en la pila es una acción 
+                   if(pila.VALOR()>1000)
+                   {
+                       Actions(pila.VALOR(), description,tokenEntrada);
+                       jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
+                   }
                     //end if actions
                    //Compara si el valor de la cima de la pila es un elemento terminal y lo compara con el elemento terminal del vector de entrada
                 if (pila.VALOR() == tokenEntrada) 
@@ -4068,7 +4183,7 @@ public class Analiza extends JFrame {
                   //if active of actions and remove of stack 
                 if(pila.VALOR()>1000)
                 {
-                    Actions(pila.VALOR(), description);
+                    Actions(pila.VALOR(), description,tokenEntrada);
                     jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
                 }//end if actions
                 
@@ -4106,7 +4221,7 @@ public class Analiza extends JFrame {
             }//end try
             //Está excepción la da la tabla lr si el token n es el que seguía según las producciones
             //devolverá un valor diferente y tirara un desbordamiento en la tabla lr
-            catch (ArrayIndexOutOfBoundsException e)
+            catch (NullPointerException e)
             {
               
                jTextAreaSintactico.append("ERROR 999 DE SINTAXIS CORRIJA SU CÓDIGO");

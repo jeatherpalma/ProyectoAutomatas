@@ -1,3 +1,0 @@
-CLASS persona BEGIN
-pepe=45*(45+65/(56-98));
-ENDCLASS
