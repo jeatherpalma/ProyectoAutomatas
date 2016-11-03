@@ -1,0 +1,9 @@
+CLASS yo BEGIN
+STRING name;
+IF(nombre=="pepe" || nombre=="ana"
+|| nombre=="ana")
+PRINT("hola");
+ELSE
+PRINT("No te conozco");
+ENDIF
+ENDCLASS

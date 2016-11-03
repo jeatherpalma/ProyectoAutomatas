@@ -1,5 +1,5 @@
-CLASS yo BEGIN
-IF(nombre=="pepe" && nombre=="ana")
-PRINT("hola");
-ENDIF
+CLASS for BEGIN
+FOR(i=0; i<=10)
+i=0;
+ENDFOR
 ENDCLASS

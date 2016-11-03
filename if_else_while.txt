@@ -1,0 +1,22 @@
+CLASS yo BEGIN
+STRING nombre;
+
+IF(nombre=="pepe" || nombre==
+"ana"
+|| nombre=="rober")
+PRINT("hola");
+
+ELSE
+PRINT("No te conozco");
+
+ENDIF
+
+BOOLEAN bandera;
+
+WHILE(bandera==TRUE)
+
+PRINT("muchos hola");
+
+ENDWHILE
+
+ENDCLASS
