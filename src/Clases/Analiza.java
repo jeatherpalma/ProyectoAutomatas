@@ -61,6 +61,16 @@ public class Analiza extends JFrame {
         //Operating
         ArrayList<Object> operands= new ArrayList<Object>();
         
+        //Stacks of types
+        ArrayList<Object> types_int = new ArrayList<Object>();
+        //Stack of avails
+        ArrayList<Object> avails_int = new ArrayList<Object>();
+        //operators
+        ArrayList<Object> operators_int = new ArrayList<Object>();
+        //jumps
+        ArrayList<Object> jumps_int = new ArrayList<Object>();
+        //Operating
+        ArrayList<Object> operands_int= new ArrayList<Object>();
         
      
         
@@ -98,6 +108,8 @@ public class Analiza extends JFrame {
         Table_constan table_const = new Table_constan();
         //Object of class Table_cuadruples
         table_cuadruples table_cuadruplos = new table_cuadruples();
+        //Object table types
+        table_types table_ty = new table_types();
 	public Analiza()
 	{
 		//Ventana principal
@@ -273,6 +285,22 @@ public class Analiza extends JFrame {
                              jumps = new ArrayList<Object>();
                             //Operating
                              operands= new ArrayList<Object>();
+                             
+                             types_int = new ArrayList<Object>();
+                              //Stack of avails
+                              avails_int = new ArrayList<Object>();
+                             //operators
+                             operators_int = new ArrayList<Object>();
+                            //jumps
+                             jumps_int = new ArrayList<Object>();
+                            //Operating
+                             operands_int= new ArrayList<Object>();
+                             
+                             //create new objects
+                             table_Symbols = new Table_Symbols();
+                             table_const = new Table_constan();
+                             table_cuadruplos = new table_cuadruples();
+                             table_ty = new table_types();
             	}});
 
 		//Etiqueta que sirve para añadir el icono de guardar
@@ -359,6 +387,24 @@ public class Analiza extends JFrame {
                              jumps = new ArrayList<Object>();
                             //Operating
                              operands= new ArrayList<Object>();
+                             
+                             types_int = new ArrayList<Object>();
+                              //Stack of avails
+                              avails_int = new ArrayList<Object>();
+                             //operators
+                             operators_int = new ArrayList<Object>();
+                            //jumps
+                             jumps_int = new ArrayList<Object>();
+                            //Operating
+                             operands_int= new ArrayList<Object>();
+                             
+                             //create new objects
+                             table_Symbols = new Table_Symbols();
+                             table_const = new Table_constan();
+                             table_cuadruplos = new table_cuadruples();
+                             table_ty = new table_types();
+                             
+                             //run analizer sintactic
                              Sintactico_version2();
 
 		        }
@@ -3596,7 +3642,7 @@ public class Analiza extends JFrame {
 
                     JOptionPane.showMessageDialog(null,"Guardado exitoso!", "Guardado exitoso!", JOptionPane.INFORMATION_MESSAGE);
                 }
-            }catch (Exception e){//por alguna excepcion salta un mensaje de error
+            }catch (HeadlessException | FileNotFoundException e){//por alguna excepcion salta un mensaje de error
                 JOptionPane.showMessageDialog(null,"Error al guardar el archivo!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -3631,12 +3677,12 @@ public class Analiza extends JFrame {
 
         }catch (FileNotFoundException e)
         {
-            e.printStackTrace();
+           
 
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            
 
         }
     }//Fin del método abrir
@@ -3684,7 +3730,8 @@ public class Analiza extends JFrame {
             case 1001:
                 if(types.isEmpty()==false)
                 {
-                  operands.add(id);   
+                  operands.add(id); 
+                  operands_int.add(terminal);
                 }
                
                 
@@ -3693,6 +3740,7 @@ public class Analiza extends JFrame {
             //Action 1002 save type on stack of types
             case 1002:
                 types.add(id);
+                types_int.add(terminal);
             break;
             case 1003:
             //Action 1003 create table of symbols
@@ -3709,8 +3757,7 @@ public class Analiza extends JFrame {
                     
                 }
                 
-                operands.clear();
-                types.clear();
+             
                 }
         
               
@@ -3720,14 +3767,17 @@ public class Analiza extends JFrame {
             //Action 1011 push stack of operands
             case 1011:
                 operands.add(id);
+                operands_int.add(terminal);
                 break;
             //Action 1012 save operator (+,-) on stack of operators
             case 1012:
                 operators.add(id);
+                operators_int.add(terminal);
                 break;
             //Action 1013 save operator (*,/) on stack of operators
             case 1013:
                 operators.add(id);
+                operators_int.add(terminal);
                 break;
             //create cuadruple     
             case 1014:
@@ -3737,6 +3787,8 @@ public class Analiza extends JFrame {
                     operador = operators.remove(operators.size()-1).toString();
                     op2=operands.remove(operands.size()-1).toString();
                     op1=operands.remove(operands.size()-1).toString();
+                
+                    
                     resultado= avails.remove(avails.size()-1).toString();
                     if(op1.equals("t1") ||op1.equals("t2") ||op1.equals("t3") ||op1.equals("t4"))
                     {
@@ -3751,10 +3803,43 @@ public class Analiza extends JFrame {
                     table_cuadruplos.set_Elements(apuntador_table_cuadruples, operador, op1, op2, resultado);
                     Object[] newRow ={apuntador_table_cuadruples,operador,op1,op2,resultado};
                     modelo_de_tabla_cuadruplos.addRow(newRow);
-                    operands.add(resultado);
-                    apuntador_table_cuadruples++;
-                    types.add("INTEGER")/*Añadido así por que falta comprobar el tipo*/;
-                
+                    
+                    
+                    
+                    
+                    /*checamos semantica*/
+                    operador = operators_int.remove(operators_int.size()-1).toString();
+                    op2=types_int.remove(types_int.size()-1).toString();
+                    op1=types_int.remove(types_int.size()-1).toString();  
+                    int type = table_ty.get_type(Integer.parseInt(op1.trim()), Integer.parseInt(op2.trim()), Integer.parseInt(operador.trim()));
+                    if(type!=500)
+                    {
+                       operands.add(resultado); 
+                       apuntador_table_cuadruples++;
+                       types_int.add(type);
+                       switch(type)
+                       {
+                           case 103:
+                               types.add("INTEGER");
+                               break;
+                           case 104:
+                               types.add("FLOAT");
+                               break;
+                           case 105:
+                               types.add("CHAR");
+                               break; 
+                           case 106:
+                               types.add("STRING");
+                               break;
+                           case 107:
+                               types.add("BOOLEAN");
+                               break;      
+                       }
+                    }else
+                    {
+                    JOptionPane.showMessageDialog(null, "Error semantico","Error",JOptionPane.ERROR_MESSAGE);
+                    }
+  
                    
                 }
                  }
@@ -3780,21 +3865,58 @@ public class Analiza extends JFrame {
                     table_cuadruplos.set_Elements(apuntador_table_cuadruples, operador, op1, op2, resultado);
                     Object[] newRow ={apuntador_table_cuadruples,operador,op1,op2,resultado};
                     modelo_de_tabla_cuadruplos.addRow(newRow);
-                    operands.add(resultado);
+                    
+                    /*checamos semantica*/
+                    operador = operators_int.remove(operators_int.size()-1).toString();
+                    op2=types_int.remove(types_int.size()-1).toString();
+                    op1=types_int.remove(types_int.size()-1).toString();  
+                    int type = table_ty.get_type(Integer.parseInt(op1.trim()), Integer.parseInt(op2.trim()), Integer.parseInt(operador.trim()));
+                    if(type!=500)
+                    {
+                       operands.add(resultado); 
+                       apuntador_table_cuadruples++;
+                       types_int.add(type);
+                       switch(type)
+                       {
+                           case 103:
+                               types.add("INTEGER");
+                               break;
+                           case 104:
+                               types.add("FLOAT");
+                               break;
+                           case 105:
+                               types.add("CHAR");
+                               break; 
+                           case 106:
+                               types.add("STRING");
+                               break;
+                           case 107:
+                               types.add("BOOLEAN");
+                               break;      
+                       }
+                    }else
+                    {
+                    JOptionPane.showMessageDialog(null, "Error semantico","Error",JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                    /*operands.add(resultado);
                     apuntador_table_cuadruples++;
-                    types.add("INTEGER")/*Añadido así por que falta comprobar el tipo*/;
+                    types.add("INTEGER");/*Añadido así por que falta comprobar el tipo*/
                    
                 }
                 }
                 break;
             case 1016:
                 operators.add("(");
+                operators_int.add(terminal);
                 break;
             case 1017:
                 operators.remove(operators.size()-1);
+                operators_int.remove(operators_int.size()-1);
                 break;
             case 1018:
                 operators.add(id);
+                operators_int.add(terminal);
                 break;
             case 1019:
                     operador = operators.remove(operators.size()-1).toString();
@@ -3813,18 +3935,55 @@ public class Analiza extends JFrame {
                     table_cuadruplos.set_Elements(apuntador_table_cuadruples, operador, op1, op2, resultado);
                     Object[] newRow ={apuntador_table_cuadruples,operador,op1,op2,resultado};
                     modelo_de_tabla_cuadruplos.addRow(newRow);
-                    operands.add(resultado);
+                    /*checamos semantica*/
+                    operador = operators_int.remove(operators_int.size()-1).toString();
+                    op2=types_int.remove(types_int.size()-1).toString();
+                    op1=types_int.remove(types_int.size()-1).toString();  
+                    int type = table_ty.get_type(Integer.parseInt(op1.trim()), Integer.parseInt(op2.trim()), Integer.parseInt(operador.trim()));
+                    if(type!=500)
+                    {
+                       operands.add(resultado); 
+                       apuntador_table_cuadruples++;
+                       types_int.add(type);
+                       
+                       switch(type)
+                       {
+                           case 103:
+                               types.add("INTEGER");
+                               break;
+                           case 104:
+                               types.add("FLOAT");
+                               break;
+                           case 105:
+                               types.add("CHAR");
+                               break; 
+                           case 106:
+                               types.add("STRING");
+                               break;
+                           case 107:
+                               types.add("BOOLEAN");
+                               break;      
+                       }
+                    }else
+                    {
+                    JOptionPane.showMessageDialog(null, "Error semantico","Error",JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                    /*operands.add(resultado);
                     apuntador_table_cuadruples++;
-                    types.add("INTEGER")/*Añadido así por que falta comprobar el tipo*/;
+                    types.add("INTEGER");/*Añadido así por que falta comprobar el tipo*/
                 break;    
             //push or     
             case 1020:
                 operators.add(id);
+                operators_int.add(terminal);
                 break;
             //push and    
             case 1021:
                 operators.add(id);
-                break;    
+                operators_int.add(terminal);
+                break;  
+                //accion del or
             case 1022:
                 if(!operators.isEmpty()){
                 if(operators.get(operators.size()-1).toString().equals("||"))
@@ -3845,13 +4004,49 @@ public class Analiza extends JFrame {
                     table_cuadruplos.set_Elements(apuntador_table_cuadruples, operador, op1, op2, resultado);
                     Object[] newRow2 ={apuntador_table_cuadruples,operador,op1,op2,resultado};
                     modelo_de_tabla_cuadruplos.addRow(newRow2);
-                    operands.add(resultado);
+                    
+                    /*checamos semantica*/
+                    operador = operators_int.remove(operators_int.size()-1).toString();
+                    op2=types_int.remove(types_int.size()-1).toString();
+                    op1=types_int.remove(types_int.size()-1).toString();  
+                    type = table_ty.get_type(Integer.parseInt(op1.trim()), Integer.parseInt(op2.trim()), Integer.parseInt(operador.trim()));
+                    if(type!=500)
+                    {
+                       operands.add(resultado); 
+                       apuntador_table_cuadruples++;
+                       types_int.add(type);
+                       switch(type)
+                       {
+                           case 103:
+                               types.add("INTEGER");
+                               break;
+                           case 104:
+                               types.add("FLOAT");
+                               break;
+                           case 105:
+                               types.add("CHAR");
+                               break; 
+                           case 106:
+                               types.add("STRING");
+                               break;
+                           case 107:
+                               types.add("BOOLEAN");
+                               break;      
+                       }
+                    }else
+                    {
+                    JOptionPane.showMessageDialog(null, "Error semantico","Error",JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                    
+                    /*operands.add(resultado);
                     apuntador_table_cuadruples++;
-                    types.add("INT");/*Añadido así por que falta tabla de tipos*/
+                    types.add("INT");*//*Añadido así por que falta tabla de tipos*/
                    
                 }
                 }
                 break;
+                //Accion del and
             case 1023:
                 if(!operators.isEmpty()){
                 if (operators.get(operators.size()-1).toString().equals("&&"))
@@ -3872,23 +4067,49 @@ public class Analiza extends JFrame {
                     table_cuadruplos.set_Elements(apuntador_table_cuadruples, operador, op1, op2, resultado);
                     Object[] newRow2 ={apuntador_table_cuadruples,operador,op1,op2,resultado};
                     modelo_de_tabla_cuadruplos.addRow(newRow2);
-                    operands.add(resultado);
-                    apuntador_table_cuadruples++;
-                    types.add("INT");/*Añadido así por que falta tabla de tipos*/
                    
+                    /*checamos semantica*/
+                    operador = operators_int.remove(operators_int.size()-1).toString();
+                    op2=types_int.remove(types_int.size()-1).toString();
+                    op1=types_int.remove(types_int.size()-1).toString();  
+                    type = table_ty.get_type(Integer.parseInt(op1.trim()), Integer.parseInt(op2.trim()), Integer.parseInt(operador.trim()));
+                    if(type!=500)
+                    {
+                       operands.add(resultado); 
+                       apuntador_table_cuadruples++;
+                       types_int.add(type);
+                       switch(type)
+                       {
+                           case 103:
+                               types.add("INTEGER");
+                               break;
+                           case 104:
+                               types.add("FLOAT");
+                               break;
+                           case 105:
+                               types.add("CHAR");
+                               break; 
+                           case 106:
+                               types.add("STRING");
+                               break;
+                           case 107:
+                               types.add("BOOLEAN");
+                               break;      
+                       }
+                    }else
+                    {
+                    JOptionPane.showMessageDialog(null, "Error semantico","Error",JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                    
+                    /*operands.add(resultado);
+                    apuntador_table_cuadruples++;
+                    types.add("INT");*//*Añadido así por que falta tabla de tipos*/
                 }
                 }
                 break;
-            //push read on stack of operators    
-            case 1024:
-                types.add(id);
-                break;
-                
-            //push read
-            case 1025:
-                types.add(id);
-                break;
-                
+           
+
            //push identificador asigna
             case 1026:
                 String tipo = table_Symbols.declarado_identificador(id);
@@ -3896,6 +4117,27 @@ public class Analiza extends JFrame {
                 {
                     types.add(tipo);
                     operands.add(id);
+                    switch(tipo)
+                    {
+                        case "INTEGER":
+                            types_int.add(103);
+                            break;
+                        case "CHAR":
+                            types_int.add(105);
+                            break;
+                        case "STRING":
+                            types_int.add(106);
+                            break;
+                        case "FLOAT":
+                            types_int.add(104);
+                            break;
+                        case "BOOLEAN":
+                            types_int.add(107);
+                            break;
+                                
+                    }
+                    
+                    operands_int.add(terminal);
                 }
                 else
                 {
@@ -3909,10 +4151,18 @@ public class Analiza extends JFrame {
                 String tipo_res = types.remove(types.size()-1).toString();
                 String ope_exp =  operands.remove(operands.size()-1).toString();
                 String ope_res =  operands.remove(operands.size()-1).toString();
+                int type_one=Integer.parseInt(types_int.remove(types_int.size()-1).toString().trim());
+                int type_two=Integer.parseInt(types_int.remove(types_int.size()-1).toString().trim());
+                if(type_one==type_two)
+                {
                 table_cuadruplos.set_Elements(apuntador_table_cuadruples, "=", "",ope_exp, ope_res);
                 Object[] newRow2 ={apuntador_table_cuadruples,"=","",ope_exp,ope_res};
                 modelo_de_tabla_cuadruplos.addRow(newRow2);
-                apuntador_table_cuadruples++;
+                apuntador_table_cuadruples++;   
+                }else{
+                    JOptionPane.showMessageDialog(null, "Error semantico","Error",JOptionPane.ERROR_MESSAGE);
+                }
+                
                 break;
                 
              //Case para constantes
@@ -3924,31 +4174,31 @@ public class Analiza extends JFrame {
                 {
                     case 140:
                     tipo_table="STRING";
-                    
+                    types_int.add(106);
                     break;
                     case 139:
                     tipo_table="CHARACTER";
-                    
+                    types_int.add(105);
                     break;
                     case 141:
                     tipo_table="BOOLEAN";
-                    
+                    types_int.add(107);
                     break;
                     case 142:
                     tipo_table="BOOLEAN";
-                   
+                   types_int.add(107);
                     break;
                     case 136:
                     tipo_table="INTEGER";
-                    
+                    types_int.add(103);
                     break;
                     case 137:
                     tipo_table="FLOAT";
-                    
+                    types_int.add(104);
                     break;
                     case 138:
                     tipo_table="FLOAT";
-                    
+                    types_int.add(104);
                     break;
                 }
                 table_const.set_Elements(apuntador_tabla_constantes, id, tipo_table, 0, 0);
@@ -3961,6 +4211,7 @@ public class Analiza extends JFrame {
             
             case 1029:
                 operators.add(id);
+                operators_int.add(terminal);
                 break;
             case 1030:
                 if(!operators.isEmpty()){
@@ -3978,17 +4229,15 @@ public class Analiza extends JFrame {
             case 1031:
                 if(!types.isEmpty())
                 {
-                    
-                    for (Object operando : operands) 
-                    {
+                      String operando = operands.remove(operands.size()-1).toString();
+                      operands_int.remove(operands_int.size()-1).toString();
+                      types.remove(types.size()-1).toString();
+                      types_int.remove(types_int.size()-1).toString();
                       table_cuadruplos.set_Elements(apuntador_table_cuadruples, "OUTPUT", "", "", operando.toString());
                       Object[] newRow3 ={apuntador_table_cuadruples,"OUTPUT","","",operando};
                       modelo_de_tabla_cuadruplos.addRow(newRow3);
                       apuntador_table_cuadruples++;
-                    }
-                    operands.clear();
-                    types.clear();
-                   
+                  
                 }
              break;
              
@@ -3996,22 +4245,23 @@ public class Analiza extends JFrame {
              case 1032:
                 if(!types.isEmpty())
                 {
-                    
-                    for (Object operando : operands) 
-                    {
-                        table_cuadruplos.set_Elements(apuntador_table_cuadruples, "INPUT", "", "", operando.toString());
+                      String operando = operands.remove(operands.size()-1).toString();
+                      operands_int.remove(operands_int.size()-1).toString();
+                      types.remove(types.size()-1).toString();
+                      types_int.remove(types_int.size()-1).toString();
+                      table_cuadruplos.set_Elements(apuntador_table_cuadruples, "INPUT", "", "", operando.toString());
                       Object[] newRow3 ={apuntador_table_cuadruples,"INPUT","","",operando};
                       modelo_de_tabla_cuadruplos.addRow(newRow3);
-                      apuntador_table_cuadruples++;
-                    }
-                    operands.clear();
-                    types.clear();
-                   
+                      apuntador_table_cuadruples++;   
+                    
+                    
                 }
              break; 
              //Action 1 of e on if
              case 1033:
-                 if(!types.isEmpty() ||types.get(types.size()-1).toString().equals("FLOAT"))
+                 if(!types.isEmpty())
+                 {
+                    if(types.get(types.size()-1).toString().equals("BOOLEAN"))
                  {
                      String exp = operands.remove(operands.size()-1).toString();
                      types.remove(types.size()-1);
@@ -4024,7 +4274,9 @@ public class Analiza extends JFrame {
                  else
                  {
                      JOptionPane.showMessageDialog(null, "Error semantico","Error",JOptionPane.ERROR_MESSAGE);
+                 } 
                  }
+                 
                  break;
             //Action 3 of if
              case 1034:
@@ -4049,8 +4301,10 @@ public class Analiza extends JFrame {
                  break;
                  //Action 2 of while
              case 1037:
-                 if(!types.isEmpty() ||types.get(types.size()-1).toString().equals("BOOLEAN"))
+                 if(!types.isEmpty())
                  {
+                     if(types.get(types.size()-1).toString().equals("BOOLEAN"))
+                    {
                      String exp = operands.remove(operands.size()-1).toString();
                      types.remove(types.size()-1);
                      Object [] newRow_3 ={apuntador_table_cuadruples,"GOTOF",exp,"",""};
@@ -4058,11 +4312,13 @@ public class Analiza extends JFrame {
                      modelo_de_tabla_cuadruplos.addRow(newRow_3);
                      apuntador_table_cuadruples++;
                      jumps.add(apuntador_table_cuadruples-1);
-                 }
+                    }
                  else
                  {
                      JOptionPane.showMessageDialog(null, "Error semantico","Error",JOptionPane.ERROR_MESSAGE);
                  }
+                 }
+                 
                  break;
                  //Action 3 of while
              case 1038:
@@ -4206,8 +4462,8 @@ public class Analiza extends JFrame {
 	               {125,130,/*Action 1001*/1001,5},
 	               {-1},
 	               {130,/*Action 1026*/1026,126,14,/*Action 1030*/1030,127/*Action 1027*/,1027},
-	               {108,/*Action 1024*/1024,128,130,/*Action 1001*/1011,5,129,127,/*Action 1003*/1032},
-	               {109,/*Action 1025*/1025,128,14,/*Action 1030*/1030,9,129,127,/*Action 1003*/1031},
+	               {108,128,130,/*Action 1026*/1026,1032,5,129,127/*Action 1003*/},
+	               {109,128,14,/*Action 1030*/1031,9,129,127,/*Action 1003*/},
 	               {125,14,9},
 	               {-1},
 	               {110,128,14,/*Action 1030*/1030,129,/*Action 1033*/1033,1,11,111,/*Action 1034*/1034},
@@ -4241,7 +4497,7 @@ public class Analiza extends JFrame {
 	               {134,/*Action 1013*/1013,25},
 	               {135,/*Action 1013*/1013,25},
 	               {-1},
-	               {130,/*Accion 10011*/1011},
+	               {130,/*Accion 10011*/1011,1026},
 	               {136,/*Action 1028*/1028},
 	               {137,/*Action 1028*/1028},
 	               {138,/*Action 1028*/1028},
