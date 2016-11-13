@@ -1,6 +1,6 @@
-CLASS persona BEGIN
-INTEGER i;
-FOR(i=0; i<=100)
-PRINT(i);
-ENDFOR
+CLASS yo BEGIN
+STRING nombre;
+IF(nombre=="pepe" && nombre=="ana")
+PRINT("hola");
+ENDIF
 ENDCLASS

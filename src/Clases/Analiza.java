@@ -4038,11 +4038,11 @@ public class Analiza extends JFrame {
                     JOptionPane.showMessageDialog(null, "Error semantico","Error",JOptionPane.ERROR_MESSAGE);
                     }
                     
+                     
                     
                     /*operands.add(resultado);
                     apuntador_table_cuadruples++;
                     types.add("INT");*//*Añadido así por que falta tabla de tipos*/
-                   
                 }
                 }
                 break;
@@ -4067,7 +4067,7 @@ public class Analiza extends JFrame {
                     table_cuadruplos.set_Elements(apuntador_table_cuadruples, operador, op1, op2, resultado);
                     Object[] newRow2 ={apuntador_table_cuadruples,operador,op1,op2,resultado};
                     modelo_de_tabla_cuadruplos.addRow(newRow2);
-                   
+                    
                     /*checamos semantica*/
                     operador = operators_int.remove(operators_int.size()-1).toString();
                     op2=types_int.remove(types_int.size()-1).toString();
@@ -4101,7 +4101,7 @@ public class Analiza extends JFrame {
                     JOptionPane.showMessageDialog(null, "Error semantico","Error",JOptionPane.ERROR_MESSAGE);
                     }
                     
-                    
+               
                     /*operands.add(resultado);
                     apuntador_table_cuadruples++;
                     types.add("INT");*//*Añadido así por que falta tabla de tipos*/
@@ -4316,6 +4316,7 @@ public class Analiza extends JFrame {
                  else
                  {
                      JOptionPane.showMessageDialog(null, "Error semantico","Error",JOptionPane.ERROR_MESSAGE);
+                     
                  }
                  }
                  
@@ -4478,8 +4479,8 @@ public class Analiza extends JFrame {
 	               {118,/*Action 1021*/1021,16,/*Action 1022*/1022},
 	               {-1,/*Action 1022*/1022},
 	               {19,20},
-	               {119/*Action 1029*/,1029},
-	               {-1,/*Action 1023*/1023},
+	               {119/*Action 1029*/,1029,1023},
+	               {-1,1023},
 	               {23,21},
 	               {22,/*Action 1018*/1018,23,/*Action 1019*/1019},
 	               {-1},
