@@ -1,6 +1,12 @@
-CLASS yo BEGIN
-STRING nombre;
-IF(nombre=="pepe" && nombre=="ana")
-PRINT("hola");
-ENDIF
+CLASS for BEGIN
+INTEGER i;
+FOR(i=0; i<=100)
+PRINT(i);
+ENDFOR
+INTEGER contador;
+contador=0;
+WHILE(contador<=100)
+contador=contador+1;
+PRINT(contador);
+ENDWHILE
 ENDCLASS

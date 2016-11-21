@@ -4479,8 +4479,8 @@ public class Analiza extends JFrame {
 	               {118,/*Action 1021*/1021,16,/*Action 1022*/1022},
 	               {-1,/*Action 1022*/1022},
 	               {19,20},
-	               {119/*Action 1029*/,1029,1023},
-	               {-1,1023},
+	               {119/*Action 1029*/,1029},
+	               {-1,/*Action and */1023},
 	               {23,21},
 	               {22,/*Action 1018*/1018,23,/*Action 1019*/1019},
 	               {-1},
@@ -4498,7 +4498,7 @@ public class Analiza extends JFrame {
 	               {134,/*Action 1013*/1013,25},
 	               {135,/*Action 1013*/1013,25},
 	               {-1},
-	               {130,/*Accion 10011*/1011,1026},
+	               {130,/*Accion 1026*/1026},
 	               {136,/*Action 1028*/1028},
 	               {137,/*Action 1028*/1028},
 	               {138,/*Action 1028*/1028},
@@ -4514,7 +4514,7 @@ public class Analiza extends JFrame {
         avails.add("t3");
         avails.add("t2");
         avails.add("t1");
-
+        
        //Bandera para el ciclo de análisis del código
        boolean bandera_while=true;
        //Pedimos un token de entrada al léxico
