@@ -5,13 +5,14 @@
  */
 package Clases;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 /**
  *
  * @author jeather
  */
-public class table_cuadruples {
+public class table_cuadruples implements Serializable {
     List<List<Object>> table_cuadruple;
 		
 //APuntador of the table
@@ -38,4 +39,19 @@ public class table_cuadruples {
     {
         return apuntador;
     }
+    
+    public void Carga()
+    {
+        for(int i =0; i< apuntador; i++){
+		
+            String Dir = table_cuadruple.get(0).get(i).toString();
+            String Desc =table_cuadruple.get(1).get(i).toString();
+            String tipo = table_cuadruple.get(2).get(i).toString();
+            String Ram = table_cuadruple.get(3).get(i).toString();
+            String Apunt = table_cuadruple.get(4).get(i).toString();
+            Object [] newRow ={Dir,Desc, tipo, Ram, Apunt};
+            Analiza.modelo_de_tabla_cuadruplos.addRow(newRow);
+                      
+        }
+   }
 }

@@ -5,6 +5,7 @@
  */
 package Clases;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * @author jeather
  */
-public class Table_constan {
+public class Table_constan implements Serializable{
     //Create table of symbols
 		List<List<Object>> table_const;
 		
@@ -37,6 +38,22 @@ public class Table_constan {
 			 table_const.get(4).add(apun);
 	                 apuntador++;
 		}
+                
+		public void Carga()
+                {
+                    for(int i =0; i< apuntador; i++){
 		
+                       String Dir = table_const.get(0).get(i).toString();
+                       String Desc =table_const.get(1).get(i).toString();
+                       String tipo = table_const.get(2).get(i).toString();
+                       String Ram = table_const.get(3).get(i).toString();
+                       String Apunt = table_const.get(4).get(i).toString();
+		       
+                       Object [] newRow ={Dir,Desc, tipo, Ram, Apunt};
+                       Analiza.defaultTableModel_constantes.addRow(newRow);
+                      
+		     }
+                    
+                }
 		
 }

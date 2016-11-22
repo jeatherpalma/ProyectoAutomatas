@@ -9,10 +9,12 @@ package Clases;
  *
  * @author jeather
  */
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Table_Symbols {
+
+public class Table_Symbols implements Serializable{
     
 	//Create table of symbols
 		List<List<Object>> table_symbols;
@@ -52,5 +54,28 @@ public class Table_Symbols {
 			return tipo;
 			
 		}
+                
+                public List getLista()
+                {
+                    return table_symbols;
+                }
+                
+                public void Carga()
+                {
+                    for(int i =0; i< apuntador; i++){
+		
+                       String Dir = table_symbols.get(0).get(i).toString();
+                       String Desc =table_symbols.get(1).get(i).toString();
+                       String tipo = table_symbols.get(2).get(i).toString();
+                       String Ram = table_symbols.get(3).get(i).toString();
+                       String Apunt = table_symbols.get(4).get(i).toString();
+		       
+                       Object [] newRow ={Dir,Desc, tipo, Ram, Apunt};
+                       Analiza.defaultTableModel_variables.addRow(newRow);
+                      
+		     }
+                    
+                }
+
 	}
 

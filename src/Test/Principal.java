@@ -1,6 +1,7 @@
 package Test;
 
 import Clases.Analiza;
+import Clases.Cargador;
 
 import javax.swing.*;
 
@@ -19,6 +20,7 @@ public class Principal {
             
         }
         Analiza analiza = new Analiza();
+        
 
     }
 }

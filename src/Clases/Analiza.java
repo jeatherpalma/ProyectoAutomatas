@@ -29,7 +29,7 @@ public class Analiza extends JFrame {
 	JFrame jFrame;
         /*Areas en donde se teclea el codigo y áres en donde aparece el código
         analizdo lexicamente y sintacticamente*/
-	JTextArea jTextAreaGuarda,jTextAreaImprime,jTextAreaSintactico;
+	public static JTextArea jTextAreaGuarda,jTextAreaImprime,jTextAreaSintactico;
         //Etiquetas de la ventana
 	JLabel jLabelTeclea,jLabelResultado,jLabelEtiquetaSintactico;
         //Scroles para las áreas
@@ -89,18 +89,18 @@ public class Analiza extends JFrame {
         JTable jtable_de_variables;
         JScrollPane jScrollPane_para_tabla_de_variables;
         //Modelo parea la tabla
-        DefaultTableModel defaultTableModel_variables;
+        public static DefaultTableModel defaultTableModel_variables;
         
         //Jtable para las constantes
         JTable jtable_de_constantes;
         JScrollPane jScrollPane_para_tabla_de_constantes;
         //Modelo parea la tabla
-        DefaultTableModel defaultTableModel_constantes;
+        public static DefaultTableModel defaultTableModel_constantes;
         
         //Para los cuadruplos y presentarlos en el Jframe
         JTable jtable_cuadruplos;
         JScrollPane scrol_cuadruplos;
-        DefaultTableModel modelo_de_tabla_cuadruplos;
+        public static DefaultTableModel modelo_de_tabla_cuadruplos;
         
         //Object of class Table_Symbols
         Table_Symbols table_Symbols = new Table_Symbols();
@@ -110,6 +110,11 @@ public class Analiza extends JFrame {
         table_cuadruples table_cuadruplos = new table_cuadruples();
         //Object table types
         table_types table_ty = new table_types();
+        
+        //Objeto del cargador
+        Cargador cargador = new Cargador();
+        
+        Codigo_class codigo_class;
 	public Analiza()
 	{
 		//Ventana principal
@@ -226,6 +231,7 @@ public class Analiza extends JFrame {
             	@Override
             	public void mouseClicked(MouseEvent e) {
                		Abrir();
+                        
                         puntero_codigo = 0;
             	}});
 
@@ -404,8 +410,10 @@ public class Analiza extends JFrame {
                              table_cuadruplos = new table_cuadruples();
                              table_ty = new table_types();
                              
+                             codigo_class = new Codigo_class();
                              //run analizer sintactic
                              Sintactico_version2();
+                             
 
 		        }
 		    }
@@ -3624,7 +3632,7 @@ public class Analiza extends JFrame {
         }else{
 
             JFileChooser fileChooser = new JFileChooser();
-            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("todos los archivos *.TXT", "txt","TXT"));//filtro para ver solo archivos .edu
+            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("todos los archivos *.HPP", "hpp","HPP"));//filtro para ver solo archivos .edu
             int seleccion = fileChooser.showSaveDialog(null);
             try{
                 if (seleccion == JFileChooser.APPROVE_OPTION){//comprueba si ha presionado el boton de aceptar
@@ -3635,8 +3643,8 @@ public class Analiza extends JFrame {
                     printwriter.close();//cierra el archivo
 
                     //comprobamos si a la hora de guardar obtuvo la extension y si no se la asignamos
-                    if(!(PATH.endsWith(".txt"))){
-                        File temp = new File(PATH+".txt");
+                    if(!(PATH.endsWith(".hpp"))){
+                        File temp = new File(PATH+".hpp");
                         JFC.renameTo(temp);//renombramos el archivo
                     }
 
@@ -3663,7 +3671,13 @@ public class Analiza extends JFrame {
             if(abrir==jFileChooser.APPROVE_OPTION) {
                 //El archivo que seleccione lo guardaremos en un File
                 archivo = jFileChooser.getSelectedFile();
-                //Se crea un FileReader a partir del archivo File
+                if(archivo.getName().contains(".hclass"))
+                {
+                   cargador.get_Read(archivo.getName());
+                }
+                else
+                {
+                    //Se crea un FileReader a partir del archivo File
                 FR = new FileReader(archivo);
                 //Se crea un BuffereadReader para imprimirlo en el área de texto
                 BR = new BufferedReader(FR);
@@ -3671,7 +3685,9 @@ public class Analiza extends JFrame {
                 //Se genera un ciclo while para escribir todos lo datos del ciclo
                 while((linea=BR.readLine())!=null){
                     jTextAreaGuarda.append(linea+"\n");
+                } 
                 }
+               
 
             }
 
@@ -3756,8 +3772,10 @@ public class Analiza extends JFrame {
                     apuntador_tabla_simbolos++;
                     
                 }
-                
-             
+                  operands.clear();
+                  operands_int.clear();
+                  types.clear();
+                  types_int.clear();
                 }
         
               
@@ -4463,15 +4481,15 @@ public class Analiza extends JFrame {
 	               {125,130,/*Action 1001*/1001,5},
 	               {-1},
 	               {130,/*Action 1026*/1026,126,14,/*Action 1030*/1030,127/*Action 1027*/,1027},
-	               {108,128,130,/*Action 1026*/1026,1032,5,129,127/*Action 1003*/},
-	               {109,128,14,/*Action 1030*/1031,9,129,127,/*Action 1003*/},
+	               {108,128,130,/*Action 1026*/1026,1032,5,129,127},
+	               {109,128,14,/*Action 1030*/1031,9,129,127},
 	               {125,14,9},
 	               {-1},
 	               {110,128,14,/*Action 1030*/1030,129,/*Action 1033*/1033,1,11,111,/*Action 1034*/1034},
 	               {112,/*Action 1035*/1035,1},
 	               {-1},
 	               {113,/*Action while 1*/1036,128,14,129,/*Action while 2*/1037,1,114,/*Action while 3*/1038},
-	               {115,128,130,/*Action for 1 */1039,126,14,/*Action for 2*/1040,127,/*Action 1003*/1003,14,/*Action 1030*/1030,/*Action for 3*/1041,129,1,116,/*Action for 4*/1042},
+	               {115,128,130,/*Action for 1 */1039,126,14,/*Action for 2*/1040,127,14,/*Action 1030*/1030,/*Action for 3*/1041,129,1,116,/*Action for 4*/1042},
 	               {16,15},
 	               {117,/*Action 1020*/1020,14,/*Action 1030*/1030},
 	               {-1},
@@ -4600,6 +4618,15 @@ public class Analiza extends JFrame {
                 {
                     jTextAreaSintactico.append("Valor borrado de la pila: " + pila.POP() +"\n");
                     JOptionPane.showMessageDialog(null, "Codigo correcto");
+                    
+                    try
+                    {
+                      cargador.set_Write(table_const,table_cuadruplos, table_Symbols,codigo_class);  
+                    }catch(IOException e)
+                    {
+                        
+                    }
+                    
                     bandera_while=false;
                     break;
                 }
@@ -4625,6 +4652,8 @@ public class Analiza extends JFrame {
         }//end while main
 
     }//Fin del método de sintaxis   
+    
+    
     /*CLASS yo BEGIN
 INTEGER edad;
 edad=(45*(46-45));
